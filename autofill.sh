@@ -15,7 +15,7 @@ echo "Clearing data from previous download location..."
 rm -r $PATH_TMP
 mkdir -p $PATH_TMP
 
-if [ ! -f $DIR/steam/apps_free.json
+if [ ! -f $DIR/steam/apps_free.json ]; then
     echo "Getting top 100 Steam apps..."
     $DIR/steam/get_top_100_apps.sh
 fi
