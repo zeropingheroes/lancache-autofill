@@ -1,42 +1,33 @@
 #!/bin/bash
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+BLUE='\033[1;34m'
+BLACK='\033[0m'
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+# Configuration
 
-PATH_TMP="/tmp/lancache-autofill"
-PATH_STEAMCMD="/usr/games/steam/steamcmd.sh"
+TMP_DIR="/tmp/lancache-autofill"
+STEAMCMD="/usr/games/steam/steamcmd.sh"
+STEAM_USERNAME="ilumos"
+STEAM_APP_DOWNLOAD_LIST="$SCRIPT_DIR/steam/app_download_list.json"
 
-STEAM_REQUEST_WINDOWS="+@sSteamCmdForcePlatformType windows"
+echo "Clearing previously downloaded data..."
+rm -r $TMP_DIR
+mkdir -p $TMP_DIR
 
-echo "Enter Steam username:"
-
-read STEAM_USERNAME
-
-echo "Clearing data from previous download location..."
-rm -r $PATH_TMP
-mkdir -p $PATH_TMP
-
-if [ ! -f $DIR/steam/apps_free.json ]; then
-    echo "Getting top 100 Steam apps..."
-    $DIR/steam/get_top_100_apps.sh
-fi
-
-echo "Starting download of free Steam apps..."
-readarray -t STEAM_APP_IDS < <(cat $DIR/steam/apps_free.json | jq '.[] | .id' )
+echo "Loading list of Steam app ID to download..."
+readarray -t STEAM_APP_IDS < <(cat $STEAM_APP_DOWNLOAD_LIST | jq '.[] | .id' )
 
 for STEAM_APP_ID in "${STEAM_APP_IDS[@]}"
 do
-    STEAM_APP_NAME=$(cat $DIR/steam/apps_free.json | jq --raw-output ".[] | select(.id == $STEAM_APP_ID) | .name")
-    echo "##################################################################################"
-    echo "Starting download of $STEAM_APP_NAME (App ID: $STEAM_APP_ID)"
-    echo "Launching SteamCMD..."
-    $PATH_STEAMCMD  +login $STEAM_USERNAME                              \
-                    $STEAM_REQUEST_WINDOWS                              \
-                    +force_install_dir $PATH_TMP/steam/$STEAM_APP_ID    \
-                    +app_license_request $STEAM_APP_ID                  \
-                    +app_update $STEAM_APP_ID validate                  \
-                    +app_update_cancel 3                                \
-                    +quit
-    echo "Finished download of $STEAM_APP_NAME (App ID: $STEAM_APP_ID)"
-    echo "##################################################################################"
-    STEAM_APP_NAME=""
+    # Get Steam app name from download list
+    STEAM_APP_NAME=$(cat $STEAM_APP_DOWNLOAD_LIST | jq --raw-output ".[] | select(.id == $STEAM_APP_ID) | .name")
+
+    printf "${BLUE}Starting download of $STEAM_APP_NAME (App ID: $STEAM_APP_ID)${BLACK}\n"
+    $STEAMCMD  +login $STEAM_USERNAME                              \
+               +@sSteamCmdForcePlatformType windows                \
+               +force_install_dir $TMP_DIR/steam/$STEAM_APP_ID     \
+               +app_license_request $STEAM_APP_ID                  \
+               +app_update $STEAM_APP_ID validate                  \
+               +quit
+    printf "${BLUE}Finished download of $STEAM_APP_NAME (App ID: $STEAM_APP_ID)${BLACK}\n"
 done
