@@ -1,0 +1,36 @@
+#!/usr/bin/env php
+<?php
+
+use Illuminate\Console\Application;
+use Illuminate\Container\Container;
+use Illuminate\Events\Dispatcher;
+use Illuminate\Database\Capsule\Manager as Capsule;
+
+use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\UpdateAppList;
+use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\SearchApps;
+use Zeropingheroes\LancacheAutofill\Console\Commands\CreateDatabase;
+
+if (file_exists($a = __DIR__.'/../../autoload.php')) {
+    require_once $a;
+} else {
+    require_once __DIR__.'/vendor/autoload.php';
+}
+
+// Set up the app
+$app = new Application(new Container, new Dispatcher, '5.4');
+
+// Set up the database
+$capsule = new Capsule;
+$capsule->addConnection([
+    'driver'    => 'sqlite',
+    'database'  => __DIR__.'/database.sqlite',
+    'prefix'    => '',
+]);
+$capsule->setAsGlobal();
+
+// Add commands
+$app->add(new UpdateAppList);
+$app->add(new SearchApps);
+$app->add(new CreateDatabase);
+
+$app->run();
