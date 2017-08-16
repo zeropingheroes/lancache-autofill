@@ -8,5 +8,5 @@
     },
     "autoload": {
         "psr-4": {"Zeropingheroes\\LancacheAutofill\\": "src/"}
-    },
+    }
 }
