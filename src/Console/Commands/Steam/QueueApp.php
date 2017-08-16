@@ -51,7 +51,7 @@ class QueueApp extends Command
         Capsule::table('steam_queue')->insert([
             'appid' => $app->appid,
             'name'  => $app->name,
-            'status'=> 'Queued'
+            'status'=> 'queued'
         ]);
 
         $this->info('Steam app "' . $app->name .'" added to download queue');
