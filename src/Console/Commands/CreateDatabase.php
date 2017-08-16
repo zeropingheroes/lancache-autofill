@@ -35,8 +35,11 @@ class CreateDatabase extends Command
             $table->string('name');
         });
 
-        Capsule::schema()->create('dummy', function ($table) {
+        Capsule::schema()->create('steam_queue', function ($table) {
             $table->increments('id')->unique();
+            $table->integer('appid')->unique();
+            $table->string('name');
+            $table->string('status');
         });
     }
 }
