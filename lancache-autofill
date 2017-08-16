@@ -8,7 +8,7 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
 // Import available commands
-use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{UpdateAppList, SearchApps, QueueApp, ShowQueue};
+use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{UpdateAppList, SearchApps, QueueApp, ShowQueue, StartDownloading};
 use Zeropingheroes\LancacheAutofill\Console\Commands\CreateDatabase;
 
 // Load Composer's autoloader
@@ -36,6 +36,7 @@ $app->add(new UpdateAppList);
 $app->add(new SearchApps);
 $app->add(new QueueApp);
 $app->add(new ShowQueue);
+$app->add(new StartDownloading);
 
 // Run the console app
 $app->run();
