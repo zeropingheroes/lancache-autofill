@@ -40,6 +40,8 @@ class CreateDatabase extends Command
             $table->integer('appid')->unique();
             $table->string('name');
             $table->string('status');
+            $table->string('message')->nullable();
+
         });
     }
 }
