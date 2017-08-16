@@ -54,22 +54,22 @@ class UpdateAppList extends Command
 
         $apps = $response['applist']['apps'];
         
+        // Laravel's SQLite driver can only insert a maximum of 500 records
+        // at a time in one compound INSERT statements, so we chunk the list
+        // of ~50,000 apps into chunks of 500
         $appsChunked = array_chunk($apps, 500);
 
         $bar = $this->output->createProgressBar(count($appsChunked));
         $bar->setFormat("%bar% %percent%%");
 
         $this->info('Inserting records into database');
-
         foreach($appsChunked as $appChunk)
         {
             Capsule::table('steam_apps')->insert($appChunk);
             $bar->advance();
         }
-
         $bar->finish();
 
         $this->info(PHP_EOL . 'Done');
-
     }
 }

@@ -1,25 +1,27 @@
 #!/usr/bin/env php
 <?php
 
+// Import Laravel modules
 use Illuminate\Console\Application;
 use Illuminate\Container\Container;
 use Illuminate\Events\Dispatcher;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\UpdateAppList;
-use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\SearchApps;
+// Import available commands
+use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{UpdateAppList, SearchApps};
 use Zeropingheroes\LancacheAutofill\Console\Commands\CreateDatabase;
 
+// Load Composer's autoloader
 if (file_exists($a = __DIR__.'/../../autoload.php')) {
     require_once $a;
 } else {
     require_once __DIR__.'/vendor/autoload.php';
 }
 
-// Set up the app
+// Set up the console app
 $app = new Application(new Container, new Dispatcher, '5.4');
 
-// Set up the database
+// Set up the SQLite database connection
 $capsule = new Capsule;
 $capsule->addConnection([
     'driver'    => 'sqlite',
@@ -28,9 +30,10 @@ $capsule->addConnection([
 ]);
 $capsule->setAsGlobal();
 
-// Add commands
+// Make commands available
+$app->add(new CreateDatabase);
 $app->add(new UpdateAppList);
 $app->add(new SearchApps);
-$app->add(new CreateDatabase);
 
+// Run the console app
 $app->run();
