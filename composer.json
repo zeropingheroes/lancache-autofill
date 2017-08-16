@@ -5,7 +5,8 @@
         "illuminate/events": "^5.4",
         "illuminate/database": "^5.4",
         "guzzlehttp/guzzle": "^6.3",
-        "symfony/process": "^3.3"
+        "symfony/process": "^3.3",
+        "vlucas/phpdotenv": "^2.4"
     },
     "autoload": {
         "psr-4": {"Zeropingheroes\\LancacheAutofill\\": "src/"}

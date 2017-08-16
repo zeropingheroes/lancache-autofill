@@ -44,9 +44,9 @@ class StartDownloading extends Command
             try {
                 $arguments = 
                 [
-                    'login'                         => 'anonymous',
+                    'login'                         => getenv('STEAM_USER'),
                     '@sSteamCmdForcePlatformType'   => 'windows',
-                    'force_install_dir'             => '/tmp/steam/'.$app->appid,
+                    'force_install_dir'             => getenv('DOWNLOAD_LOCATION').$app->appid,
                     'app_license_request'           => $app->appid,
                     'app_update'                    => $app->appid,
                     'quit'                          => null,
