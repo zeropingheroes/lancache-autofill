@@ -8,7 +8,7 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Dotenv\Dotenv;
 
 use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{UpdateAppList, SearchApps, QueueApp, ShowQueue, StartDownloading};
-use Zeropingheroes\LancacheAutofill\Console\Commands\{CreateDatabase, DeleteDownloads};
+use Zeropingheroes\LancacheAutofill\Console\Commands\{InitialiseDatabase, InitialiseDownloadsDirectory};
 
 // Load Composer's autoloader
 if (file_exists($a = __DIR__.'/../../autoload.php')) {
@@ -20,7 +20,7 @@ if (file_exists($a = __DIR__.'/../../autoload.php')) {
 // Load environment variables
 $dotenv = new Dotenv(__DIR__);
 $dotenv->load();
-$dotenv->required(['DOWNLOAD_LOCATION', 'STEAMCMD', 'STEAM_USER']);
+$dotenv->required(['DOWNLOADS_DIRECTORY', 'STEAMCMD_PATH', 'DEFAULT_STEAM_USER']);
 
 // Set up the console app
 $app = new Application(new Container, new Dispatcher, '5.4');
@@ -34,8 +34,8 @@ $capsule->addConnection([
 $capsule->setAsGlobal();
 
 // Make commands available
-$app->add(new CreateDatabase);
-$app->add(new DeleteDownloads);
+$app->add(new InitialiseDatabase);
+$app->add(new InitialiseDownloadsDirectory);
 
 $app->add(new UpdateAppList);
 $app->add(new SearchApps);

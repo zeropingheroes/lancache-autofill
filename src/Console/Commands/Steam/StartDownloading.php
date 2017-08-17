@@ -29,7 +29,14 @@ class StartDownloading extends Command
      * @return mixed
      */
     public function handle()
-    {       
+    {
+        if ( ! file_exists(getenv('STEAMCMD_PATH')) )
+        {
+            $this->error('SteamCMD not found - please check the STEAMCMD_PATH environment variable is set correctly');
+            die();
+        }
+
+
         if ( $this->queuedItems() == 0 )
         {
             $this->error('Queue is empty - nothing to download');
@@ -44,9 +51,9 @@ class StartDownloading extends Command
             try {
                 $arguments = 
                 [
-                    'login'                         => getenv('STEAM_USER'),
+                    'login'                         => $app->account,
                     '@sSteamCmdForcePlatformType'   => $app->platform,
-                    'force_install_dir'             => getenv('DOWNLOAD_LOCATION').'/'.$app->platform.'/'.$app->appid,
+                    'force_install_dir'             => getenv('DOWNLOADS_DIRECTORY').'/'.$app->platform.'/'.$app->appid,
                     'app_license_request'           => $app->appid,
                     'app_update'                    => $app->appid,
                     'quit'                          => null,
@@ -62,7 +69,7 @@ class StartDownloading extends Command
                 // Start SteamCMD with the arguments, using "unbuffer"
                 // as SteamCMD buffers output when it is not run in a
                 // tty, which prevents us showing output line by line
-                $process = new Process('unbuffer steamcmd.sh '.$argumentString);
+                $process = new Process('unbuffer '. getenv('STEAMCMD_PATH') . ' ' . $argumentString);
                 
                 // Set a long timeout as downloading could take a while
                 $process->setTimeout(14400);
@@ -79,10 +86,6 @@ class StartDownloading extends Command
                 $this->updateQueueItemStatus($app->id, 'completed');
 
             } catch (ProcessFailedException $e) {
-                if($process->getExitCode() == 127) {
-                    $this->error('SteamCMD not found - please check the correct path is set in your .env file');
-                    die();
-                }
 
                 // Create an array of SteamCMD's output (removing excess newlines)
                 $lines = explode(PHP_EOL,trim($process->getOutput()));

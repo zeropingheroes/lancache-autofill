@@ -15,7 +15,7 @@ class QueueApp extends Command
     protected $signature = 'steam:queue-app
                             {app_id : The ID of the app}
                             {platforms=windows : Comma separated list of platforms to download the app for [windows, osx, linux]}
-                            {--account= : The Steam account to use when downloading the app (if different to the STEAM_USER environment variable)}';
+                            {--account= : The Steam account to use when downloading the app (the DEFAULT_STEAM_USER environment variable will be used if this option is omitted)}';
 
     /**
      * The console command description.
@@ -42,7 +42,7 @@ class QueueApp extends Command
         $platforms = explode(',', $this->argument('platforms')) ?? ['windows'];
         
         // If no account is specified, default to the account set in the .env file
-        $account = $this->option('account') ?? getenv('STEAM_USER');
+        $account = $this->option('account') ?? getenv('DEFAULT_STEAM_USER');
         
         if( array_diff($platforms, $this::PLATFORMS))
         {

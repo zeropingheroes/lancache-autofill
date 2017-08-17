@@ -7,21 +7,21 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-class DeleteDownloads extends Command
+class InitialiseDownloadsDirectory extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'app:delete-downloads';
+    protected $signature = 'app:initialise-downloads-directory';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Delete downloads from the disk';
+    protected $description = 'Initialise the downloads directory';
 
     /**
      * Execute the console command.
@@ -30,8 +30,8 @@ class DeleteDownloads extends Command
      */
     public function handle()
     {       
-        if ($this->confirm('Are you sure you wish to remove all files and folders in "'.getenv('DOWNLOAD_LOCATION').'"?')) {
-            $remove = new Process('rm -r '.getenv('DOWNLOAD_LOCATION'));
+        if ($this->confirm('Are you sure you wish to remove all files and folders in "'.getenv('DOWNLOADS_DIRECTORY').'"?')) {
+            $remove = new Process('rm -r '.getenv('DOWNLOADS_DIRECTORY'));
             $remove->run(function ($type, $buffer) {
 
                 if (Process::ERR === $type) {
@@ -42,14 +42,14 @@ class DeleteDownloads extends Command
 
             });
 
-            $create = new Process('mkdir -p '.getenv('DOWNLOAD_LOCATION'));
+            $create = new Process('mkdir -p '.getenv('DOWNLOADS_DIRECTORY'));
             $create->run();
 
             if( $remove->isSuccessful() && $create->isSuccessful() ) {
-                $this->info('Successfully removed all files and folders in "'.getenv('DOWNLOAD_LOCATION').'"');
+                $this->info('Successfully removed all files and folders in "'.getenv('DOWNLOADS_DIRECTORY').'"');
                 die();
             }
-            $this->error('Unable to remove all files and folders in "'.getenv('DOWNLOAD_LOCATION').'"');
+            $this->error('Unable to remove all files and folders in "'.getenv('DOWNLOADS_DIRECTORY').'"');
         }
     }
 }
