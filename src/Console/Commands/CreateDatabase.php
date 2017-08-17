@@ -39,7 +39,7 @@ class CreateDatabase extends Command
             $table->increments('id')->unique();
             $table->integer('appid');
             $table->string('name');
-            $table->string('platform');
+            $table->string('account');
             $table->string('status');
             $table->string('message')->nullable();
 
