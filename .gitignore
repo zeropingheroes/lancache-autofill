@@ -1,3 +1,5 @@
 /vendor/
 .env
 database.sqlite
+.idea/
+.DS_Store
