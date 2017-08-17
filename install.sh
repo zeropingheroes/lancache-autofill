@@ -21,7 +21,6 @@ composer update
 printf "${GREEN}Installing Steam${BLACK}\n"
 mkdir -p /usr/games/steam && cd /usr/games/steam && curl -sqL "http://media.steampowered.com/client/steamcmd_linux.tar.gz" | tar zxvf -
 
-
 printf "${GREEN}Creating database file${BLACK}\n"
 cd $SCRIPT_DIR && touch "database.sqlite"
 
