@@ -20,7 +20,7 @@ if (file_exists($a = __DIR__.'/../../autoload.php')) {
 // Load environment variables
 $dotenv = new Dotenv(__DIR__);
 $dotenv->load();
-$dotenv->required(['DATABASE', 'DOWNLOAD_LOCATION', 'STEAMCMD', 'STEAM_USER']);
+$dotenv->required(['DOWNLOAD_LOCATION', 'STEAMCMD', 'STEAM_USER']);
 
 // Set up the console app
 $app = new Application(new Container, new Dispatcher, '5.4');
@@ -29,7 +29,7 @@ $app = new Application(new Container, new Dispatcher, '5.4');
 $capsule = new Capsule;
 $capsule->addConnection([
     'driver'    => 'sqlite',
-    'database'  => getenv('DATABASE')
+    'database'  => 'database.sqlite'
 ]);
 $capsule->setAsGlobal();
 
