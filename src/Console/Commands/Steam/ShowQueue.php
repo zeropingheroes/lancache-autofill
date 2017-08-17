@@ -84,7 +84,7 @@ class ShowQueue extends Command
 
         foreach( $apps as $app )
         {
-            $this->{$messageStyle}( $app->appid ."\t". $app->name . "\t" . $app->platform . "\t" . $app->message );
+            $this->{$messageStyle}( $app->appid ."\t". $app->name . "\t" . $app->platform . "\t" . $app->account . "\t" . $app->message );
         }
     }
 
