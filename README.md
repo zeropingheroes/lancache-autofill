@@ -1,5 +1,5 @@
 # lancache-autofill
-Automatically fill a Lancache with content.
+Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with the content of your choosing, so that subsequent downloads for the same content will be served from the lancache, improving speeds and reducing load on your internet connection.
 
 # Features
 * Choose which platform(s) to download an app for
@@ -8,7 +8,9 @@ Automatically fill a Lancache with content.
 * See which apps failed, and what the error message was
 
 # Requirements
-* Ubuntu 16.04 x64
+* A working [lancache](https://github.com/zeropingheroes/lancache)
+* Ubuntu 16.04 x64, configured to download via the lancache
+* Sufficient disk space to (temporarily) store the downloaded content
 
 # Installation
 * `git clone https://github.com/zeropingheroes/lancache-autofill.git`
@@ -16,35 +18,34 @@ Automatically fill a Lancache with content.
 * `sudo ./install.sh`
 
 # Quick Start
-Set the default Steam account to be used when queueing apps for download:
+1. Set the default Steam account to be used when queueing apps for download:
 
-`nano .env`
+    `nano .env`
 
-Search for the apps you wish to download to find their app ID:
+2. Search for the apps you wish to download to find their app ID:
 
-`./lancache-autofill steam:search-apps "team fortress 2"`
+	`./lancache-autofill steam:search-apps "team fortress 2"`
+	
+	`440     Team Fortress 2
+	[...]`
 
-	440     Team Fortress 2
-	[...]
+3. Queue the app for download by ID:
 
-Queue the app for download by ID:
+    `./lancache-autofill steam:queue-app 440`
 
-`./lancache-autofill steam:queue-app 440`
+4. Start downloading items in the download queue:
 
-Start downloading items in the download queue:
+    `./lancache-autofill steam:start-downloading`
 
-`./lancache-autofill steam:start-downloading`
+5. View the download queue to see the status of the downloads:
 
-View the download queue to see the status of the downloads:
+    `./lancache-autofill steam:show-queue`
 
-`./lancache-autofill steam:show-queue`
+6. Clear the temporary download location:
 
-Clear the temporary download location:
-
-`./lancache-autofill app:initialise-downloads-directory`
+    `./lancache-autofill app:initialise-downloads-directory`
 
 # Command Reference
-
 `app:initialise-database`
 
 * Initialise the database.
@@ -97,6 +98,7 @@ Clear the temporary download location:
 
 # Limitations & Known Issues
 * Steam is the only supported platform currently
+* Paid apps can only be cached with access to a Steam account that owns them
 * No support for forcing download of 32 bit apps
 * Yes, it's written in PHP. No shame.
 
@@ -107,3 +109,4 @@ Clear the temporary download location:
 * [Laravel Query Builder](https://laravel.com/docs/5.4/queries)
 * [Laravel Artisan Console](https://laravel.com/docs/5.4/artisan)
 * [Symfony Process Component](http://symfony.com/doc/current/components/process.html)
+* [dotenv Reference](https://github.com/vlucas/phpdotenv/blob/master/README.md)
