@@ -13,17 +13,13 @@ Automatically fill a Lancache with content.
 
 # Usage
 
+Set the default Steam account to be used when queueing apps for download:
+
+`nano .env`
+
 Log in to your Steam account to SteamCMD:
 
 `/usr/games/steam/steamcmd.sh +login your-username-here`
-
-Create the database structure:
-
-`./lancache-autofill app:create-database`
-
-Download the app list from Steam:
-
-`./lancache-autofill steam:update-app-list`
 
 Search for the apps you wish to download to find their app ID:
 
@@ -46,7 +42,7 @@ View the download queue to see the status of the downloads:
 
 Clear the temporary download location:
 
-`./lancache-autofill app:delete-downloads`
+`./lancache-autofill app:initialise-downloads-directory`
 
 # Reference
 
