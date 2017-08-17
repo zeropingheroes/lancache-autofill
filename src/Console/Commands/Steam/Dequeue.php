@@ -53,9 +53,13 @@ class Dequeue extends Command
 
         if( $this->option('account') )
             $query->where('account', $this->option('account'));
-                
-        $affected = $query->delete();
 
+        // If no options were specified, ask for confirmation
+        if( ! array_filter($this->options()) && ! $this->confirm('Are you sure you want to clear the download queue?') )
+            die();
+
+        $affected = $query->delete();
+        
         if( ! $affected ) {
             $this->error('No items in the queue match the provided criteria');
             die();
