@@ -26,3 +26,7 @@ cd $SCRIPT_DIR && touch "database.sqlite"
 
 printf "${GREEN}Creating your enviroment file${BLACK}\n"
 cd $SCRIPT_DIR && cp ".env.example" ".env" && /bin/nano ".env"
+
+cd $SCRIPT_DIR && ./lancache-autofill app:initialise-database
+
+cd $SCRIPT_DIR && ./lancache-autofill steam:update-app-list
