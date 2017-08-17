@@ -79,12 +79,12 @@ class ShowQueue extends Command
         if ( ! count($apps) )
             return;
 
-
         $this->{$messageStyle}(ucfirst($status) . ':');
 
+        $this->{$messageStyle}( "DB ID\tApp ID\tApp Name\tPlatform\tSteam Account\tMessage" );
         foreach( $apps as $app )
         {
-            $this->{$messageStyle}( $app->appid ."\t". $app->name . "\t" . $app->platform . "\t" . $app->account . "\t" . $app->message );
+            $this->{$messageStyle}( $app->id ."\t". $app->appid ."\t". $app->name . "\t" . $app->platform . "\t" . $app->account . "\t" . $app->message );
         }
     }
 
