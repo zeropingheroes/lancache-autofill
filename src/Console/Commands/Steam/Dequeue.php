@@ -15,7 +15,8 @@ class Dequeue extends Command
     protected $signature = 'steam:dequeue
                             {--app_id=}
                             {--platform=}
-                            {--account=}';
+                            {--account=}
+                            {--status=}';
     /**
      * The console command description.
      *
@@ -31,6 +32,13 @@ class Dequeue extends Command
     const PLATFORMS = ['windows', 'osx', 'linux'];
 
     /**
+     * The permissible statuses.
+     *
+     * @var array
+     */
+    const STATUSES = ['queued', 'completed', 'failed'];
+
+    /**
      * Execute the console command.
      *
      * @return mixed
@@ -40,6 +48,12 @@ class Dequeue extends Command
         if( $this->option('platform') && ! in_array($this->option('platform'), $this::PLATFORMS))
         {
             $this->error('Invalid platform specified. Available platforms are: '. implode(' ', $this::PLATFORMS));
+            die();
+        }
+
+        if( $this->option('status') && ! in_array($this->option('status'), $this::STATUSES))
+        {
+            $this->error('Invalid status specified. Available statuses are: '. implode(' ', $this::STATUSES));
             die();
         }
 
@@ -53,6 +67,9 @@ class Dequeue extends Command
 
         if( $this->option('account') )
             $query->where('account', $this->option('account'));
+
+        if( $this->option('status') )
+            $query->where('status', $this->option('status'));
 
         // If no options were specified, ask for confirmation
         if( ! array_filter($this->options()) && ! $this->confirm('Are you sure you want to clear the download queue?') )
