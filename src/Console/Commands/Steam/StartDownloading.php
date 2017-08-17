@@ -30,23 +30,17 @@ class StartDownloading extends Command
      */
     public function handle()
     {
-        if ( ! file_exists(getenv('STEAMCMD_PATH')) )
-        {
-            $this->error('SteamCMD not found - please check the STEAMCMD_PATH environment variable is set correctly');
-            die();
-        }
-
-
         if ( $this->queuedItems() == 0 )
         {
-            $this->error('Queue is empty - nothing to download');
+            $this->error('Nothing to download');
+            $this->info('Run "lancache-autofill steam:show-queue" to see the queue');
             die();
         }
 
-        // Loop through all apps to process
+        // Loop through all apps in the queue
         while( $app = $this->nextApp() ) {
             
-            $this->info('Starting download of ' . $app->name . ' for ' . $app->platform);
+            $this->info('Starting download of ' . $app->name . ' for ' . $app->platform . ' from Steam account '. $app->account);
 
             try {
                 $arguments = 
@@ -73,6 +67,7 @@ class StartDownloading extends Command
                 
                 // Set a long timeout as downloading could take a while
                 $process->setTimeout(14400);
+                $process->setIdleTimeout(60);
 
                 // Show SteamCMD output line by line
                 $process->run(function ($type, $buffer) {
@@ -82,7 +77,7 @@ class StartDownloading extends Command
                 if (!$process->isSuccessful())
                     throw new ProcessFailedException($process);
 
-                $this->info('Successfully completed download of ' . $app->name . ' for ' . $app->platform);
+                $this->info('Successfully completed download of ' . $app->name . ' for ' . $app->platform . ' from Steam account '. $app->account);
                 $this->updateQueueItemStatus($app->id, 'completed');
 
             } catch (ProcessFailedException $e) {
@@ -93,9 +88,8 @@ class StartDownloading extends Command
                 // Get the last line (removing ANSI codes)
                 $lastLine = preg_replace('#\x1b\[[0-9;]*[a-zA-Z]#', '', end($lines));
 
-                $this->error('Failed to download ' . $app->name . ' for ' . $app->platform);
+                $this->error('Failed to download ' . $app->name . ' for ' . $app->platform. ' from Steam account '. $app->account);
                 $this->updateQueueItemStatus($app->id, 'failed', $lastLine );
-
             }
         }
     }
