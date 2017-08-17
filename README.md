@@ -8,6 +8,7 @@ Automatically fill a Lancache with content.
 # Installation
 
 * `git clone https://github.com/zeropingheroes/lancache-autofill.git`
+* `cd lancache-autofill`
 * `sudo ./install.sh`
 
 # Usage
@@ -24,18 +25,18 @@ Download the app list from Steam:
 
 `./lancache-autofill steam:update-app-list`
 
-Search for the apps you wish to download:
+Search for the apps you wish to download to find their app ID:
 
 `./lancache-autofill steam:search-apps "team fortress 2"`
 
 	440     Team Fortress 2
 	[...]
 
-Queue the app for download:
+Queue the app for download by ID:
 
 `./lancache-autofill steam:queue-app 440`
 
-Start downloading:
+Start downloading items in the download queue:
 
 `./lancache-autofill steam:start-downloading`
 
