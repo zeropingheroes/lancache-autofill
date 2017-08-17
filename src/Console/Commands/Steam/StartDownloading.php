@@ -30,11 +30,27 @@ class StartDownloading extends Command
      */
     public function handle()
     {
-        if ( $this->queuedItems() == 0 )
-        {
+        if ( $this->queuedItems() == 0 ) {
             $this->error('Nothing to download');
-            $this->info('Run "lancache-autofill steam:show-queue" to see the queue');
+            $this->info('Run "./lancache-autofill steam:show-queue" to see the queue');
             die();
+        }
+
+        // Check all Steam accounts specified in the queue are authorised
+        foreach ($this->accountsInQueue() as $account ) {
+            $process = new Process('unbuffer '. getenv('STEAMCMD_PATH') . ' +@NoPromptForPassword 1 +login ' . $account . '  +quit');
+
+            // Show SteamCMD output line by line
+            $process->run(function ($type, $buffer) {
+                $this->line(str_replace(["\r", "\n"], '', $buffer));
+              });
+
+            if (!$process->isSuccessful()) {
+                $this->error('Steam account ' . $account . ' is not authorised');
+                $this->comment('Please run "./lancache-autofill steam:authorise-account '.$account.'"');
+                die();
+            }
+            $this->info('Steam account ' . $account . ' is authorised');
         }
 
         // Loop through all apps in the queue
@@ -47,6 +63,7 @@ class StartDownloading extends Command
                 [
                     'login'                         => $app->account,
                     '@sSteamCmdForcePlatformType'   => $app->platform,
+                    '@NoPromptForPassword'          => 1,
                     'force_install_dir'             => getenv('DOWNLOADS_DIRECTORY').'/'.$app->platform.'/'.$app->appid,
                     'app_license_request'           => $app->appid,
                     'app_update'                    => $app->appid,
@@ -113,5 +130,13 @@ class StartDownloading extends Command
         return Capsule::table('steam_queue')
                         ->where('status', 'queued')
                         ->count();
+    }
+
+    private function accountsInQueue()
+    {
+        return Capsule::table('steam_queue')
+                        ->where('status', 'queued')
+                        ->distinct('account')
+                        ->pluck('account');
     }
 }
