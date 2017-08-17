@@ -65,6 +65,12 @@ Clear the temporary download location:
 * Available platforms are: windows, osx, linux
 * If no platform is specified, the Windows version of the app will be queued
 
+`steam:dequeue-app appid [platform(s)]`
+
+* Dequeue a Steam app from the download queue.
+* Optionally the platform(s) to download can be specified as a comma-separated list
+* If no platform is specified, all platforms will be dequeued
+
 `steam:search-apps name`
 
 * Search Steam apps by name.

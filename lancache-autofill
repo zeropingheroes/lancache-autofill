@@ -7,7 +7,7 @@ use Illuminate\Events\Dispatcher;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Dotenv\Dotenv;
 
-use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{UpdateAppList, SearchApps, QueueApp, ShowQueue, AuthoriseAccount, StartDownloading};
+use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{UpdateAppList, SearchApps, QueueApp, ShowQueue, DequeueApp, AuthoriseAccount, StartDownloading};
 use Zeropingheroes\LancacheAutofill\Console\Commands\{InitialiseDatabase, InitialiseDownloadsDirectory};
 
 // Load Composer's autoloader
@@ -45,6 +45,7 @@ $app->add(new UpdateAppList);
 $app->add(new SearchApps);
 $app->add(new QueueApp);
 $app->add(new ShowQueue);
+$app->add(new DequeueApp);
 $app->add(new AuthoriseAccount);
 $app->add(new StartDownloading);
 
