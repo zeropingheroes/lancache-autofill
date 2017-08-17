@@ -37,8 +37,9 @@ class CreateDatabase extends Command
 
         Capsule::schema()->create('steam_queue', function ($table) {
             $table->increments('id')->unique();
-            $table->integer('appid')->unique();
+            $table->integer('appid');
             $table->string('name');
+            $table->string('platform');
             $table->string('status');
             $table->string('message')->nullable();
 

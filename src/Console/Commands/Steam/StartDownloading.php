@@ -39,14 +39,14 @@ class StartDownloading extends Command
         // Loop through all apps to process
         while( $app = $this->nextApp() ) {
             
-            $this->info('Starting download of ' . $app->name );
+            $this->info('Starting download of ' . $app->name . ' for ' . $app->platform);
 
             try {
                 $arguments = 
                 [
                     'login'                         => getenv('STEAM_USER'),
-                    '@sSteamCmdForcePlatformType'   => 'windows',
-                    'force_install_dir'             => getenv('DOWNLOAD_LOCATION').$app->appid,
+                    '@sSteamCmdForcePlatformType'   => $app->platform,
+                    'force_install_dir'             => getenv('DOWNLOAD_LOCATION').'/'.$app->platform.'/'.$app->appid,
                     'app_license_request'           => $app->appid,
                     'app_update'                    => $app->appid,
                     'quit'                          => null,
@@ -75,12 +75,12 @@ class StartDownloading extends Command
                 if (!$process->isSuccessful())
                     throw new ProcessFailedException($process);
 
-                $this->info('Successfully completed download of ' . $app->name );
+                $this->info('Successfully completed download of ' . $app->name . ' for ' . $app->platform);
                 $this->updateQueueItemStatus($app->id, 'completed');
 
             } catch (ProcessFailedException $e) {
                 if($process->getExitCode() == 127) {
-                    $this->error('SteamCMD not found - please ensure it is in your $PATH');
+                    $this->error('SteamCMD not found - please check the correct path is set in your .env file');
                     die();
                 }
 
@@ -90,7 +90,7 @@ class StartDownloading extends Command
                 // Get the last line (removing ANSI codes)
                 $lastLine = preg_replace('#\x1b\[[0-9;]*[a-zA-Z]#', '', end($lines));
 
-                $this->error('Failed to download ' . $app->name );
+                $this->error('Failed to download ' . $app->name . ' for ' . $app->platform);
                 $this->updateQueueItemStatus($app->id, 'failed', $lastLine );
 
             }
