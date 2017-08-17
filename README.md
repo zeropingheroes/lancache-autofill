@@ -71,6 +71,11 @@ Clear the temporary download location:
 * Optionally specify any combination of app ID, platform, account and status
 * Calling with no arguments clears the queue
 
+`steam:requeue [status=failed]`
+
+* Requeue failed and/or completed items in the download queue.
+* By default failed items are requeued
+
 `steam:search-apps name`
 
 * Search Steam apps by name.
