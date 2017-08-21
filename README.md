@@ -11,6 +11,7 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * A working [lancache](https://github.com/zeropingheroes/lancache)
 * Ubuntu 16.04 x64, configured to download via the lancache
 * Sufficient disk space to (temporarily) store the downloaded content
+* PHP 7.0
 
 # Installation
 * `git clone https://github.com/zeropingheroes/lancache-autofill.git`
