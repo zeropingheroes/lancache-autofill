@@ -2,10 +2,9 @@
 
 namespace Zeropingheroes\LancacheAutofill\Console\Commands\Steam;
 
+use GuzzleHttp\Client;
 use Illuminate\Console\Command;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Client;
 
 class UpdateAppList extends Command
 {
@@ -39,21 +38,20 @@ class UpdateAppList extends Command
     {
         $this->info('Clearing apps from database');
         Capsule::table('steam_apps')->truncate();
-        
+
         $this->info('Downloading app list from Steam Web API');
         $client = new Client();
         $result = $client->request('GET', self::STEAM_APP_LIST_URL);
 
-        if ( $result->getStatusCode() != 200 )
-        {
+        if ($result->getStatusCode() != 200) {
             $this->error('Steam Web API unreachable');
             die();
         }
 
-        $response = json_decode($result->getBody(), TRUE);
+        $response = json_decode($result->getBody(), true);
 
         $apps = $response['applist']['apps'];
-        
+
         // Laravel's SQLite driver can only insert a maximum of 500 records
         // at a time in one compound INSERT statements, so we chunk the list
         // of ~50,000 apps into chunks of 500
@@ -63,13 +61,12 @@ class UpdateAppList extends Command
         $bar->setFormat("%bar% %percent%%");
 
         $this->info('Inserting records into database');
-        foreach($appsChunked as $appChunk)
-        {
+        foreach ($appsChunked as $appChunk) {
             Capsule::table('steam_apps')->insert($appChunk);
             $bar->advance();
         }
         $bar->finish();
 
-        $this->info(PHP_EOL . 'Done');
+        $this->info(PHP_EOL.'Done');
     }
 }

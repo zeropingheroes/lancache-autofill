@@ -1,19 +1,23 @@
 #!/usr/bin/env php
 <?php
 
+use Dotenv\Dotenv;
 use Illuminate\Console\Application;
 use Illuminate\Container\Container;
-use Illuminate\Events\Dispatcher;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use Dotenv\Dotenv;
-
-use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{UpdateAppList, SearchApps, QueueApp, ShowQueue, Dequeue, Requeue, AuthoriseAccount, StartDownloading};
-use Zeropingheroes\LancacheAutofill\Console\Commands\{InitialiseDatabase, InitialiseDownloadsDirectory};
+use Illuminate\Events\Dispatcher;
+use Zeropingheroes\LancacheAutofill\Console\Commands\{
+    InitialiseDatabase, InitialiseDownloadsDirectory
+};
+use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{
+    AuthoriseAccount, Dequeue, QueueApp, Requeue, SearchApps, ShowQueue, StartDownloading, UpdateAppList
+};
 
 // Load Composer's autoloader
 if (file_exists($a = __DIR__.'/../../autoload.php')) {
     require_once $a;
-} else {
+}
+else {
     require_once __DIR__.'/vendor/autoload.php';
 }
 
@@ -22,7 +26,7 @@ $dotenv = new Dotenv(__DIR__);
 $dotenv->load();
 $dotenv->required(['DOWNLOADS_DIRECTORY', 'STEAMCMD_PATH', 'DEFAULT_STEAM_USER']);
 
-if ( ! file_exists(getenv('STEAMCMD_PATH')) ) {
+if (!file_exists(getenv('STEAMCMD_PATH'))) {
     die('SteamCMD not found - please check the STEAMCMD_PATH environment variable is set correctly');
 }
 
@@ -32,8 +36,8 @@ $app = new Application(new Container, new Dispatcher, '5.4');
 // Set up the SQLite database connection
 $capsule = new Capsule;
 $capsule->addConnection([
-    'driver'    => 'sqlite',
-    'database'  => 'database.sqlite'
+    'driver' => 'sqlite',
+    'database' => 'database.sqlite',
 ]);
 $capsule->setAsGlobal();
 

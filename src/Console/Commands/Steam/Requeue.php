@@ -34,29 +34,29 @@ class Requeue extends Command
      * @return mixed
      */
     public function handle()
-    { 
-        if( $this->argument('status') && ! in_array($this->argument('status'), $this::STATUSES))
-        {
-            $this->error('Invalid status specified. Available statuses are: '. implode(' ', $this::STATUSES));
+    {
+        if ($this->argument('status') && !in_array($this->argument('status'), $this::STATUSES)) {
+            $this->error('Invalid status specified. Available statuses are: '.implode(' ', $this::STATUSES));
             die();
         }
 
         $query = Capsule::table('steam_queue')
-                            ->where('status','<>','queued');
+            ->where('status', '<>', 'queued');
 
-        if( $this->argument('status') )
+        if ($this->argument('status')) {
             $query->where('status', $this->argument('status'));
+        }
 
         $affected = $query->update([
             'status' => 'queued',
             'message' => null,
         ]);
-        
-        if( ! $affected ) {
+
+        if (!$affected) {
             $this->error('No items in the queue match the provided criteria');
             die();
         }
 
-        $this->info('Requeued ' . $affected .' item(s) in the download queue');
+        $this->info('Requeued '.$affected.' item(s) in the download queue');
     }
 }

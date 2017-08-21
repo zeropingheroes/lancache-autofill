@@ -3,9 +3,7 @@
 namespace Zeropingheroes\LancacheAutofill\Console\Commands;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Process\Process;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class InitialiseDownloadsDirectory extends Command
 {
@@ -29,14 +27,15 @@ class InitialiseDownloadsDirectory extends Command
      * @return mixed
      */
     public function handle()
-    {       
+    {
         if ($this->confirm('Are you sure you wish to remove all files and folders in "'.getenv('DOWNLOADS_DIRECTORY').'"?')) {
             $remove = new Process('rm -r '.getenv('DOWNLOADS_DIRECTORY'));
             $remove->run(function ($type, $buffer) {
 
                 if (Process::ERR === $type) {
                     $this->error(str_replace(["\r", "\n"], '', $buffer));
-                } else {
+                }
+                else {
                     $this->line(str_replace(["\r", "\n"], '', $buffer));
                 }
 
@@ -45,7 +44,7 @@ class InitialiseDownloadsDirectory extends Command
             $create = new Process('mkdir -p '.getenv('DOWNLOADS_DIRECTORY'));
             $create->run();
 
-            if( $remove->isSuccessful() && $create->isSuccessful() ) {
+            if ($remove->isSuccessful() && $create->isSuccessful()) {
                 $this->info('Successfully removed all files and folders in "'.getenv('DOWNLOADS_DIRECTORY').'"');
                 die();
             }

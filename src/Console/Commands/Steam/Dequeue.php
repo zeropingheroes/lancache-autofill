@@ -44,44 +44,47 @@ class Dequeue extends Command
      * @return mixed
      */
     public function handle()
-    { 
-        if( $this->option('platform') && ! in_array($this->option('platform'), $this::PLATFORMS))
-        {
-            $this->error('Invalid platform specified. Available platforms are: '. implode(' ', $this::PLATFORMS));
+    {
+        if ($this->option('platform') && !in_array($this->option('platform'), $this::PLATFORMS)) {
+            $this->error('Invalid platform specified. Available platforms are: '.implode(' ', $this::PLATFORMS));
             die();
         }
 
-        if( $this->option('status') && ! in_array($this->option('status'), $this::STATUSES))
-        {
-            $this->error('Invalid status specified. Available statuses are: '. implode(' ', $this::STATUSES));
+        if ($this->option('status') && !in_array($this->option('status'), $this::STATUSES)) {
+            $this->error('Invalid status specified. Available statuses are: '.implode(' ', $this::STATUSES));
             die();
         }
 
         $query = Capsule::table('steam_queue');
 
-        if( $this->option('app_id') )
+        if ($this->option('app_id')) {
             $query->where('appid', $this->option('app_id'));
+        }
 
-        if( $this->option('platform') )
+        if ($this->option('platform')) {
             $query->where('platform', $this->option('platform'));
+        }
 
-        if( $this->option('account') )
+        if ($this->option('account')) {
             $query->where('account', $this->option('account'));
+        }
 
-        if( $this->option('status') )
+        if ($this->option('status')) {
             $query->where('status', $this->option('status'));
+        }
 
         // If no options were specified, ask for confirmation
-        if( ! array_filter($this->options()) && ! $this->confirm('Are you sure you want to clear the download queue?') )
+        if (!array_filter($this->options()) && !$this->confirm('Are you sure you want to clear the download queue?')) {
             die();
+        }
 
         $affected = $query->delete();
-        
-        if( ! $affected ) {
+
+        if (!$affected) {
             $this->error('No items in the queue match the provided criteria');
             die();
         }
 
-        $this->info('Removed ' . $affected .' item(s) from the download queue');
+        $this->info('Removed '.$affected.' item(s) from the download queue');
     }
 }

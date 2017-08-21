@@ -33,7 +33,8 @@ class InitialiseDatabase extends Command
                 $this->info('Removing existing database tables');
                 Capsule::schema()->dropIfExists('steam_apps');
                 Capsule::schema()->dropIfExists('steam_queue');
-            } else {
+            }
+            else {
                 die();
             }
 

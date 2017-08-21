@@ -27,14 +27,13 @@ class SearchApps extends Command
      * @return mixed
      */
     public function handle()
-    {       
+    {
         $apps = Capsule::table('steam_apps')
-                        ->where('name', 'like', '%' . $this->argument('name') . '%')
-                        ->get();
-        
-        foreach($apps as $app)
-        {
-            $this->info($app->appid ."\t". $app->name);
+            ->where('name', 'like', '%'.$this->argument('name').'%')
+            ->get();
+
+        foreach ($apps as $app) {
+            $this->info($app->appid."\t".$app->name);
         }
     }
 }

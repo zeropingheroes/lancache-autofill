@@ -34,30 +34,26 @@ class ShowQueue extends Command
      * @return mixed
      */
     public function handle()
-    {       
-        if( $this->argument('status') && ! in_array($this->argument('status'), $this::STATUSES))
-        {
-            $this->error('Invalid status specified. Available statuses are: '. implode(' ', $this::STATUSES));
+    {
+        if ($this->argument('status') && !in_array($this->argument('status'), $this::STATUSES)) {
+            $this->error('Invalid status specified. Available statuses are: '.implode(' ', $this::STATUSES));
             die();
         }
 
         // If a status is specified, display only apps of that status
-        if( $this->argument('status') )
-        {
-            $this->displayAppsWithStatus( $this->argument('status') );
+        if ($this->argument('status')) {
+            $this->displayAppsWithStatus($this->argument('status'));
             die();
         }
 
-        foreach($this::STATUSES as $status)
-        {
+        foreach ($this::STATUSES as $status) {
             $this->displayAppsWithStatus($status);
         }
     }
 
-    private function displayAppsWithStatus( $status )
+    private function displayAppsWithStatus($status)
     {
-        switch($status)
-        {
+        switch ($status) {
             case 'queued':
                 $messageStyle = 'comment';
                 break;
@@ -72,19 +68,19 @@ class ShowQueue extends Command
         }
 
         $apps = Capsule::table('steam_queue')
-                        ->where('status', $status)
-                        ->orderBy('message')
-                        ->get();
+            ->where('status', $status)
+            ->orderBy('message')
+            ->get();
 
-        if ( ! count($apps) )
+        if (!count($apps)) {
             return;
+        }
 
-        $this->{$messageStyle}(ucfirst($status) . ':');
+        $this->{$messageStyle}(ucfirst($status).':');
 
-        $this->{$messageStyle}( "DB ID\tApp ID\tApp Name\tPlatform\tSteam Account\tMessage" );
-        foreach( $apps as $app )
-        {
-            $this->{$messageStyle}( $app->id ."\t". $app->appid ."\t". $app->name . "\t" . $app->platform . "\t" . $app->account . "\t" . $app->message );
+        $this->{$messageStyle}("DB ID\tApp ID\tApp Name\tPlatform\tSteam Account\tMessage");
+        foreach ($apps as $app) {
+            $this->{$messageStyle}($app->id."\t".$app->appid."\t".$app->name."\t".$app->platform."\t".$app->account."\t".$app->message);
         }
     }
 
