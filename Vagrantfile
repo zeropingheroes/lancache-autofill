@@ -14,6 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.provider "virtualbox" do |v| 
       v.customize ["modifyvm", :id, "--natdnshostresolver1", "off"]
       v.customize ["modifyvm", :id, "--natdnsproxy1", "off"]
+      v.customize ["modifyvm", :id, "--uartmode1", "disconnected" ]
     end
 
   config.vm.provision "shell",
