@@ -2,4 +2,5 @@
 .env
 database.sqlite
 .idea/
+.vagrant/
 .DS_Store
