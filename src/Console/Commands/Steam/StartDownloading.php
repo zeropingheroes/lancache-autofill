@@ -46,7 +46,7 @@ class StartDownloading extends Command
             });
 
             if (!$process->isSuccessful()) {
-                $this->error('Steam account '.$account.' is not $process authorised');
+                $this->error('Steam account '.$account.' is not authorised');
                 $this->comment('Please run "./lancache-autofill steam:authorise-account '.$account.'"');
                 die();
             }
