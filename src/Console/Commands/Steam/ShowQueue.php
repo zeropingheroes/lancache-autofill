@@ -51,6 +51,12 @@ class ShowQueue extends Command
         }
     }
 
+    /**
+     * Display apps in the queue for a given status
+     *
+     * @param $status string
+     * @return void
+     */
     private function displayAppsWithStatus($status)
     {
         switch ($status) {

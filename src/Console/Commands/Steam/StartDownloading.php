@@ -112,6 +112,11 @@ class StartDownloading extends Command
         }
     }
 
+    /**
+     * Return the next app in the queue
+     *
+     * @return mixed
+     */
     private function nextApp()
     {
         return Capsule::table('steam_queue')
@@ -119,6 +124,14 @@ class StartDownloading extends Command
             ->first();
     }
 
+    /**
+     * Update an item's status in the queue
+     *
+     * @param $id
+     * @param $status
+     * @param null $message
+     * @return int
+     */
     private function updateQueueItemStatus($id, $status, $message = null)
     {
         return Capsule::table('steam_queue')
@@ -126,6 +139,11 @@ class StartDownloading extends Command
             ->update(['status' => $status, 'message' => $message]);
     }
 
+    /**
+     * Get total number of items in queue
+     *
+     * @return int
+     */
     private function queuedItems()
     {
         return Capsule::table('steam_queue')
@@ -133,6 +151,11 @@ class StartDownloading extends Command
             ->count();
     }
 
+    /**
+     * Get collection of accounts specified to download apps
+     *
+     * @return \Illuminate\Support\Collection
+     */
     private function accountsInQueue()
     {
         return Capsule::table('steam_queue')
