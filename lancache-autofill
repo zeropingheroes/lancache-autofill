@@ -24,7 +24,7 @@ else {
 // Load environment variables
 $dotenv = new Dotenv(__DIR__);
 $dotenv->load();
-$dotenv->required(['DOWNLOADS_DIRECTORY', 'STEAMCMD_PATH', 'DEFAULT_STEAM_USER']);
+$dotenv->required(['DOWNLOADS_DIRECTORY', 'STEAMCMD_PATH']);
 
 // TODO: Move to class so existance of SteamCMD can be checked at the appropriate time
 //if (!file_exists(getenv('STEAMCMD_PATH'))) {
@@ -41,6 +41,7 @@ $capsule->addConnection([
     'database' => 'database.sqlite',
 ]);
 $capsule->setAsGlobal();
+$capsule->bootEloquent();
 
 // Make commands available
 $app->add(new InitialiseDatabase);

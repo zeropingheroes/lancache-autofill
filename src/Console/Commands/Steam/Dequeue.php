@@ -15,7 +15,6 @@ class Dequeue extends Command
     protected $signature = 'steam:dequeue
                             {--app_id=}
                             {--platform=}
-                            {--account=}
                             {--status=}';
     /**
      * The console command description.
@@ -58,15 +57,11 @@ class Dequeue extends Command
         $query = Capsule::table('steam_queue');
 
         if ($this->option('app_id')) {
-            $query->where('appid', $this->option('app_id'));
+            $query->where('app_id', $this->option('app_id'));
         }
 
         if ($this->option('platform')) {
             $query->where('platform', $this->option('platform'));
-        }
-
-        if ($this->option('account')) {
-            $query->where('account', $this->option('account'));
         }
 
         if ($this->option('status')) {

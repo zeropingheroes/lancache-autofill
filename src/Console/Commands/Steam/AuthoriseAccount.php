@@ -4,6 +4,7 @@ namespace Zeropingheroes\LancacheAutofill\Console\Commands\Steam;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
+use Zeropingheroes\LancacheAutofill\Models\SteamAccount;
 
 class AuthoriseAccount extends Command
 {
@@ -28,7 +29,11 @@ class AuthoriseAccount extends Command
      */
     public function handle()
     {
-        $account = $this->argument('account') ?? getenv('DEFAULT_STEAM_USER');
+        $account = $this->argument('account');
+
+        if( ! $account ){
+            $account = $this->ask('Please enter your Steam username');
+        }
 
         $this->info('Authorising account '.$account);
         $password = $this->secret('Please enter your password');
@@ -51,6 +56,12 @@ class AuthoriseAccount extends Command
             $this->error('Failed to authorise Steam account '.$account);
             die();
         }
-        $this->info('Successfully authorised Steam account '.$account);
+
+        if (SteamAccount::firstOrCreate(['username' => $account])) {
+            $this->info('Successfully authorised Steam account '.$account);
+        }
+        else {
+            $this->error('Failed to add account '.$account.' to database');
+        }
     }
 }

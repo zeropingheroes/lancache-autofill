@@ -36,8 +36,9 @@ class StartDownloading extends Command
             die();
         }
 
-        // Check all Steam accounts specified in the queue are authorised
-        foreach ($this->accountsInQueue() as $account) {
+        // Check all Steam accounts specified in the accounts table are authorised
+        $this->info('Checking all Steam accounts are authorised');
+        foreach ($this->steamAccounts() as $account) {
             $process = new Process('unbuffer '.getenv('STEAMCMD_PATH').' +@NoPromptForPassword 1 +login '.$account.'  +quit');
 
             // Show SteamCMD output line by line
@@ -47,67 +48,40 @@ class StartDownloading extends Command
 
             if (!$process->isSuccessful()) {
                 $this->error('Steam account '.$account.' is not authorised');
-                $this->comment('Please run "./lancache-autofill steam:authorise-account '.$account.'"');
+                $this->comment('Please re-run "./lancache-autofill steam:authorise-account '.$account.'"');
                 die();
             }
-            $this->info('Steam account '.$account.' is authorised');
+            $this->info('Steam account '.$account.' is authorised and will be used to download apps');
         }
 
         // Loop through all apps in the queue
-        while ($app = $this->nextApp()) {
+        while ($item = $this->nextApp()) {
 
-            $this->info('Starting download of '.$app->name.' for '.$app->platform.' from Steam account '.$app->account);
+            // Attempt download using each authorised Steam account in turn
+            foreach ($this->steamAccounts() as $account) {
 
-            try {
-                $arguments =
-                    [
-                        'login' => $app->account,
-                        '@sSteamCmdForcePlatformType' => $app->platform,
-                        '@NoPromptForPassword' => 1,
-                        'force_install_dir' => getenv('DOWNLOADS_DIRECTORY').'/'.$app->platform.'/'.$app->appid,
-                        'app_license_request' => $app->appid,
-                        'app_update' => $app->appid,
-                        'quit' => null,
-                    ];
+                $this->info('Starting download of '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
 
-                $argumentString = null;
+                try {
+                    $this->download($item->app_id, $item->platform, $account);
 
-                // Build argument string
-                foreach ($arguments as $argument => $value) {
-                    $argumentString .= "+$argument $value ";
+                    $this->info('Successfully completed download of '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
+                    $this->updateQueueItemStatus($item->id, 'completed');
+
+                    // As the download was successful, do not attempt to download using any other Steam accounts
+                    break;
+
+                } catch (ProcessFailedException $e) {
+
+                    // Create an array of SteamCMD's output (removing excess newlines)
+                    $lines = explode(PHP_EOL, trim($process->getOutput()));
+
+                    // Get the last line (removing ANSI codes)
+                    $lastLine = preg_replace('#\x1b\[[0-9;]*[a-zA-Z]#', '', end($lines));
+
+                    $this->error('Failed to download '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
+                    $this->updateQueueItemStatus($item->id, 'failed', $lastLine);
                 }
-
-                // Start SteamCMD with the arguments, using "unbuffer"
-                // as SteamCMD buffers output when it is not run in a
-                // tty, which prevents us showing output line by line
-                $process = new Process('unbuffer '.getenv('STEAMCMD_PATH').' '.$argumentString);
-
-                // Set a long timeout as downloading could take a while
-                $process->setTimeout(14400);
-                $process->setIdleTimeout(60);
-
-                // Show SteamCMD output line by line
-                $process->run(function ($type, $buffer) {
-                    $this->line(str_replace(["\r", "\n"], '', $buffer));
-                });
-
-                if (!$process->isSuccessful()) {
-                    throw new ProcessFailedException($process);
-                }
-
-                $this->info('Successfully completed download of '.$app->name.' for '.$app->platform.' from Steam account '.$app->account);
-                $this->updateQueueItemStatus($app->id, 'completed');
-
-            } catch (ProcessFailedException $e) {
-
-                // Create an array of SteamCMD's output (removing excess newlines)
-                $lines = explode(PHP_EOL, trim($process->getOutput()));
-
-                // Get the last line (removing ANSI codes)
-                $lastLine = preg_replace('#\x1b\[[0-9;]*[a-zA-Z]#', '', end($lines));
-
-                $this->error('Failed to download '.$app->name.' for '.$app->platform.' from Steam account '.$app->account);
-                $this->updateQueueItemStatus($app->id, 'failed', $lastLine);
             }
         }
     }
@@ -156,11 +130,53 @@ class StartDownloading extends Command
      *
      * @return \Illuminate\Support\Collection
      */
-    private function accountsInQueue()
+    private function steamAccounts()
     {
-        return Capsule::table('steam_queue')
-            ->where('status', 'queued')
-            ->distinct('account')
-            ->pluck('account');
+        return Capsule::table('steam_accounts')->pluck('username');
+    }
+
+    /**
+     * Start a Steam download
+     *
+     * @param $appId
+     * @param $account
+     * @param $platform
+     * @throws ProcessFailedException
+     */
+    private function download($appId, $platform, $account)
+    {
+        $arguments =
+            [
+                'login' => $account,
+                '@sSteamCmdForcePlatformType' => $platform,
+                '@NoPromptForPassword' => 1,
+                'force_install_dir' => getenv('DOWNLOADS_DIRECTORY').'/'.$platform.'/'.$appId,
+                'app_license_request' => $appId,
+                'app_update' => $appId,
+                'quit' => null,
+            ];
+
+        // Build argument string
+        foreach ($arguments as $argument => $value) {
+            $argumentString .= "+$argument $value ";
+        }
+
+        // Start SteamCMD with the arguments, using "unbuffer"
+        // as SteamCMD buffers output when it is not run in a
+        // tty, which prevents us showing output line by line
+        $download = new Process('unbuffer '.getenv('STEAMCMD_PATH').' '.$argumentString);
+
+        // Set a long timeout as downloading could take a while
+        $download->setTimeout(14400);
+        $download->setIdleTimeout(60);
+
+        // Show SteamCMD output line by line
+        $download->run(function ($type, $buffer) {
+            $this->line(str_replace(["\r", "\n"], '', $buffer));
+        });
+
+        if (!$download->isSuccessful()) {
+            throw new ProcessFailedException($download);
+        }
     }
 }

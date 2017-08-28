@@ -73,20 +73,22 @@ class ShowQueue extends Command
                 $messageStyle = 'info';
         }
 
-        $apps = Capsule::table('steam_queue')
+        $queue = Capsule::table('steam_queue')
             ->where('status', $status)
             ->orderBy('message')
             ->get();
 
-        if (!count($apps)) {
+        if (!count($queue)) {
             return;
         }
 
         $this->{$messageStyle}(ucfirst($status).':');
 
-        $this->{$messageStyle}("DB ID\tApp ID\tApp Name\tPlatform\tSteam Account\tMessage");
-        foreach ($apps as $app) {
-            $this->{$messageStyle}($app->id."\t".$app->appid."\t".$app->name."\t".$app->platform."\t".$app->account."\t".$app->message);
+        // TODO: Show app name
+        // TODO: Tabulate
+        $this->{$messageStyle}("DB ID\tApp ID\tPlatform\tMessage");
+        foreach ($queue as $item) {
+            $this->{$messageStyle}($item->id."\t".$item->app_id."\t".$item->platform."\t".$item->message);
         }
     }
 

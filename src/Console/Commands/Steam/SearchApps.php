@@ -33,7 +33,7 @@ class SearchApps extends Command
             ->get();
 
         foreach ($apps as $app) {
-            $this->info($app->appid."\t".$app->name);
+            $this->info($app->id."\t".$app->name);
         }
     }
 }

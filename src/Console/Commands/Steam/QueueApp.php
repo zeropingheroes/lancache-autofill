@@ -14,8 +14,7 @@ class QueueApp extends Command
      */
     protected $signature = 'steam:queue-app
                             {app_id : The ID of the app}
-                            {platforms=windows : Comma separated list of platforms to download the app for [windows, osx, linux]}
-                            {--account= : The Steam account to use when downloading the app (the DEFAULT_STEAM_USER environment variable will be used if this option is omitted)}';
+                            {platforms=windows : Comma separated list of platforms to download the app for [windows, osx, linux]}';
 
     /**
      * The console command description.
@@ -41,18 +40,14 @@ class QueueApp extends Command
         // If no platforms are specified, default to windows
         $platforms = explode(',', $this->argument('platforms')) ?? ['windows'];
 
-        // If no account is specified, default to the account set in the .env file
-        $account = $this->option('account') ?? getenv('DEFAULT_STEAM_USER');
-
         if (array_diff($platforms, $this::PLATFORMS)) {
             $this->error('Invalid platform(s) specified. Available platforms are: '.implode(' ', $this::PLATFORMS));
             die();
         }
 
-
         // Check if app with specified ID exists
         $app = Capsule::table('steam_apps')
-            ->where('appid', $this->argument('app_id'))
+            ->where('id', $this->argument('app_id'))
             ->first();
 
         if (!$app) {
@@ -63,7 +58,7 @@ class QueueApp extends Command
         // Queue each platform separately
         foreach ($platforms as $platform) {
             $alreadyQueued = Capsule::table('steam_queue')
-                ->where('appid', $app->appid)
+                ->where('app_id', $app->id)
                 ->where('platform', $platform)
                 ->count();
             if ($alreadyQueued) {
@@ -73,14 +68,12 @@ class QueueApp extends Command
 
             // Add the app to the download queue, specifying the platform and account
             Capsule::table('steam_queue')->insert([
-                'appid' => $app->appid,
-                'name' => $app->name,
+                'app_id' => $app->id,
                 'platform' => $platform,
-                'account' => $account,
                 'status' => 'queued',
             ]);
 
-            $this->info('Added Steam app "'.$app->name.'" on platform "'.$platform.'" from Steam account "'.$account.'" to download queue');
+            $this->info('Added Steam app "'.$app->name.'" on platform "'.$platform.'" to download queue');
 
         }
 

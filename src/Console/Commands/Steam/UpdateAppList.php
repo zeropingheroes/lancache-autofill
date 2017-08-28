@@ -52,6 +52,13 @@ class UpdateAppList extends Command
 
         $apps = $response['applist']['apps'];
 
+        $apps = array_map(function($app) {
+            return [
+                'name' => $app['name'],
+                'id' => $app['appid']
+            ];
+        }, $apps);
+
         // Laravel's SQLite driver can only insert a maximum of 500 records
         // at a time in one compound INSERT statements, so we chunk the list
         // of ~50,000 apps into chunks of 500
