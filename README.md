@@ -19,30 +19,38 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * `sudo ./install.sh`
 
 # Quick Start
-1. Set the default Steam account to be used when queueing apps for download:
+1. Install and initialise SteamCMD:
+
+    `./lancache-autofill steam:initialise`
+
+2. Set the default Steam account to be used when queueing apps for download:
 
     `nano .env`
 
-2. Search for the apps you wish to download to find their app ID:
+3. Search for the apps you wish to download to find their app ID:
 
 	`./lancache-autofill steam:search-apps "team fortress 2"`
 	
 	`440     Team Fortress 2
 	[...]`
 
-3. Queue the app for download by ID:
+4. Queue the app for download by ID:
 
     `./lancache-autofill steam:queue-app 440`
 
-4. Start downloading items in the download queue:
+5. Authorise your Steam account:
+
+    `./lancache-autofill steam:authorise-account`
+
+6. Start downloading items in the download queue:
 
     `./lancache-autofill steam:start-downloading`
 
-5. View the download queue to see the status of the downloads:
+7. View the download queue to see the status of the downloads:
 
     `./lancache-autofill steam:show-queue`
 
-6. Clear the temporary download location:
+8. Clear the temporary download location:
 
     `./lancache-autofill app:initialise-downloads-directory`
 
@@ -54,6 +62,10 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 `app:initialise-downloads-directory`
 
 * Initialise the downloads directory.
+
+`steam:initialise`
+
+* Install and initialise SteamCMD
 
 `steam:authorise-account [account]`
 

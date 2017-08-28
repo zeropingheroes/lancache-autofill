@@ -17,9 +17,6 @@ apt install -y  lib32gcc1 \
 printf "${GREEN}Installing dependencies with Composer${BLACK}\n"
 cd $SCRIPT_DIR && composer install
 
-printf "${GREEN}Installing Steam${BLACK}\n"
-mkdir -p /usr/games/steam && cd /usr/games/steam && curl -sqL "http://media.steampowered.com/client/steamcmd_linux.tar.gz" | tar zxvf -
-
 printf "${GREEN}Creating database file${BLACK}\n"
 cd $SCRIPT_DIR && touch "database.sqlite"
 
