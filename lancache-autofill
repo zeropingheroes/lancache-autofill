@@ -6,10 +6,10 @@ use Illuminate\Console\Application;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
-use Zeropingheroes\LancacheAutofill\Console\Commands\{
+use Zeropingheroes\LancacheAutofill\Commands\App\{
     InitialiseDatabase, InitialiseDownloadsDirectory
 };
-use Zeropingheroes\LancacheAutofill\Console\Commands\Steam\{
+use Zeropingheroes\LancacheAutofill\Commands\Steam\{
     AuthoriseAccount, Dequeue, Initialise, QueueApp, Requeue, SearchApps, ShowQueue, StartDownloading, UpdateAppList
 };
 

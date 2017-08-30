@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeropingheroes\LancacheAutofill\Console\Commands\Steam;
+namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeropingheroes\LancacheAutofill\Console\Commands\Steam;
+namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;

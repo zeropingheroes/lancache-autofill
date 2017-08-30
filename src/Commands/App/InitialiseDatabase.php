@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeropingheroes\LancacheAutofill\Console\Commands;
+namespace Zeropingheroes\LancacheAutofill\Commands\App;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Capsule\Manager as Capsule;

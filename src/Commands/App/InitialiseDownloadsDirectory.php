@@ -1,6 +1,6 @@
 <?php
 
-namespace Zeropingheroes\LancacheAutofill\Console\Commands;
+namespace Zeropingheroes\LancacheAutofill\Commands\App;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
@@ -29,7 +29,7 @@ class InitialiseDownloadsDirectory extends Command
     public function handle()
     {
         if ($this->confirm('Are you sure you wish to remove all files and folders in "'.getenv('DOWNLOADS_DIRECTORY').'"?')) {
-            $remove = new Process('rm -r '.getenv('DOWNLOADS_DIRECTORY'));
+            $remove = new Process('rm -rf '.getenv('DOWNLOADS_DIRECTORY'));
             $remove->run(function ($type, $buffer) {
 
                 if (Process::ERR === $type) {
