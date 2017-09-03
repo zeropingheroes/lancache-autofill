@@ -1,9 +1,9 @@
 {
     "require": {
-        "illuminate/console": "^5.4",
-        "illuminate/container": "^5.4",
-        "illuminate/events": "^5.4",
-        "illuminate/database": "^5.4",
+        "illuminate/console": "5.5.*",
+        "illuminate/container": "5.5.*",
+        "illuminate/events": "5.5.*",
+        "illuminate/database": "5.5.*",
         "guzzlehttp/guzzle": "^6.3",
         "symfony/process": "^3.3",
         "vlucas/phpdotenv": "^2.4"

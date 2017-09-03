@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "59c6616c846e979b9a04f042e4085c34",
-    "content-hash": "4d753a1a2ca7f725914c05c37bd14596",
+    "hash": "f8f3d4172d568d8467d323563af31849",
+    "content-hash": "0e777fd0feb88056787b498cad84ddc5",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -257,34 +257,33 @@
         },
         {
             "name": "illuminate/console",
-            "version": "v5.4.27",
+            "version": "v5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/console.git",
-                "reference": "bdc5c6f53cb474e2aeec46b6a9999fcedfb62a4e"
+                "reference": "9c1b3071a04de258e7954abd51af2c6424fe8e0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/console/zipball/bdc5c6f53cb474e2aeec46b6a9999fcedfb62a4e",
-                "reference": "bdc5c6f53cb474e2aeec46b6a9999fcedfb62a4e",
+                "url": "https://api.github.com/repos/illuminate/console/zipball/9c1b3071a04de258e7954abd51af2c6424fe8e0e",
+                "reference": "9c1b3071a04de258e7954abd51af2c6424fe8e0e",
                 "shasum": ""
             },
             "require": {
-                "illuminate/contracts": "5.4.*",
-                "illuminate/support": "5.4.*",
-                "nesbot/carbon": "~1.20",
-                "php": ">=5.6.4",
-                "symfony/console": "~3.2"
+                "illuminate/contracts": "5.5.*",
+                "illuminate/support": "5.5.*",
+                "php": ">=7.0",
+                "symfony/console": "~3.3"
             },
             "suggest": {
                 "guzzlehttp/guzzle": "Required to use the ping methods on schedules (~6.0).",
                 "mtdowling/cron-expression": "Required to use scheduling component (~1.0).",
-                "symfony/process": "Required to use scheduling component (~3.2)."
+                "symfony/process": "Required to use scheduling component (~3.3)."
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -304,30 +303,31 @@
             ],
             "description": "The Illuminate Console package.",
             "homepage": "https://laravel.com",
-            "time": "2017-06-10 13:11:18"
+            "time": "2017-08-24 22:31:53"
         },
         {
             "name": "illuminate/container",
-            "version": "v5.4.27",
+            "version": "v5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/container.git",
-                "reference": "c5b8a02a34a52c307f16922334c355c5eef725a6"
+                "reference": "a7095697649494ced03d33cf4e756ccee94f8ab2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/container/zipball/c5b8a02a34a52c307f16922334c355c5eef725a6",
-                "reference": "c5b8a02a34a52c307f16922334c355c5eef725a6",
+                "url": "https://api.github.com/repos/illuminate/container/zipball/a7095697649494ced03d33cf4e756ccee94f8ab2",
+                "reference": "a7095697649494ced03d33cf4e756ccee94f8ab2",
                 "shasum": ""
             },
             "require": {
-                "illuminate/contracts": "5.4.*",
-                "php": ">=5.6.4"
+                "illuminate/contracts": "5.5.*",
+                "php": ">=7.0",
+                "psr/container": "~1.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -347,29 +347,31 @@
             ],
             "description": "The Illuminate Container package.",
             "homepage": "https://laravel.com",
-            "time": "2017-05-24 14:15:53"
+            "time": "2017-08-14 18:00:01"
         },
         {
             "name": "illuminate/contracts",
-            "version": "v5.4.27",
+            "version": "v5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/contracts.git",
-                "reference": "31f0193eb14aa3ee07841dc254081425616e79f0"
+                "reference": "e935ac3bcfa32a9d8b9a082e5085f233fa9cf918"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/contracts/zipball/31f0193eb14aa3ee07841dc254081425616e79f0",
-                "reference": "31f0193eb14aa3ee07841dc254081425616e79f0",
+                "url": "https://api.github.com/repos/illuminate/contracts/zipball/e935ac3bcfa32a9d8b9a082e5085f233fa9cf918",
+                "reference": "e935ac3bcfa32a9d8b9a082e5085f233fa9cf918",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.6.4"
+                "php": ">=7.0",
+                "psr/container": "~1.0",
+                "psr/simple-cache": "~1.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -389,41 +391,40 @@
             ],
             "description": "The Illuminate Contracts package.",
             "homepage": "https://laravel.com",
-            "time": "2017-04-19 20:17:43"
+            "time": "2017-08-27 09:20:20"
         },
         {
             "name": "illuminate/database",
-            "version": "v5.4.27",
+            "version": "v5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/database.git",
-                "reference": "199393c01cdb87c98aaed9be098b5699415b3bcf"
+                "reference": "0f8b6398baf4762fe147295dee156956f00a7743"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/database/zipball/199393c01cdb87c98aaed9be098b5699415b3bcf",
-                "reference": "199393c01cdb87c98aaed9be098b5699415b3bcf",
+                "url": "https://api.github.com/repos/illuminate/database/zipball/0f8b6398baf4762fe147295dee156956f00a7743",
+                "reference": "0f8b6398baf4762fe147295dee156956f00a7743",
                 "shasum": ""
             },
             "require": {
-                "illuminate/container": "5.4.*",
-                "illuminate/contracts": "5.4.*",
-                "illuminate/support": "5.4.*",
-                "nesbot/carbon": "~1.20",
-                "php": ">=5.6.4"
+                "illuminate/container": "5.5.*",
+                "illuminate/contracts": "5.5.*",
+                "illuminate/support": "5.5.*",
+                "php": ">=7.0"
             },
             "suggest": {
                 "doctrine/dbal": "Required to rename columns and drop SQLite columns (~2.5).",
                 "fzaninotto/faker": "Required to use the eloquent factory builder (~1.4).",
-                "illuminate/console": "Required to use the database commands (5.4.*).",
-                "illuminate/events": "Required to use the observers with Eloquent (5.4.*).",
-                "illuminate/filesystem": "Required to use the migrations (5.4.*).",
-                "illuminate/pagination": "Required to paginate the result set (5.4.*)."
+                "illuminate/console": "Required to use the database commands (5.5.*).",
+                "illuminate/events": "Required to use the observers with Eloquent (5.5.*).",
+                "illuminate/filesystem": "Required to use the migrations (5.5.*).",
+                "illuminate/pagination": "Required to paginate the result set (5.5.*)."
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -449,32 +450,32 @@
                 "orm",
                 "sql"
             ],
-            "time": "2017-06-15 19:07:41"
+            "time": "2017-08-29 19:22:34"
         },
         {
             "name": "illuminate/events",
-            "version": "v5.4.27",
+            "version": "v5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/events.git",
-                "reference": "ebdca3b0305e9fc954afb9e422c4559482cd11e6"
+                "reference": "4879769619e0ea8a720885ba802e315c822eb246"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/events/zipball/ebdca3b0305e9fc954afb9e422c4559482cd11e6",
-                "reference": "ebdca3b0305e9fc954afb9e422c4559482cd11e6",
+                "url": "https://api.github.com/repos/illuminate/events/zipball/4879769619e0ea8a720885ba802e315c822eb246",
+                "reference": "4879769619e0ea8a720885ba802e315c822eb246",
                 "shasum": ""
             },
             "require": {
-                "illuminate/container": "5.4.*",
-                "illuminate/contracts": "5.4.*",
-                "illuminate/support": "5.4.*",
-                "php": ">=5.6.4"
+                "illuminate/container": "5.5.*",
+                "illuminate/contracts": "5.5.*",
+                "illuminate/support": "5.5.*",
+                "php": ">=7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -494,41 +495,41 @@
             ],
             "description": "The Illuminate Events package.",
             "homepage": "https://laravel.com",
-            "time": "2017-05-02 12:57:00"
+            "time": "2017-08-27 02:05:29"
         },
         {
             "name": "illuminate/support",
-            "version": "v5.4.27",
+            "version": "v5.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "a42393b56d0ec75f55e760f2a47bcf85a17a278d"
+                "reference": "8fd54c43171117146f7de7d5d24d59747f41bd77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/a42393b56d0ec75f55e760f2a47bcf85a17a278d",
-                "reference": "a42393b56d0ec75f55e760f2a47bcf85a17a278d",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/8fd54c43171117146f7de7d5d24d59747f41bd77",
+                "reference": "8fd54c43171117146f7de7d5d24d59747f41bd77",
                 "shasum": ""
             },
             "require": {
-                "doctrine/inflector": "~1.0",
+                "doctrine/inflector": "~1.1",
                 "ext-mbstring": "*",
-                "illuminate/contracts": "5.4.*",
-                "paragonie/random_compat": "~1.4|~2.0",
-                "php": ">=5.6.4"
+                "illuminate/contracts": "5.5.*",
+                "nesbot/carbon": "^1.20",
+                "php": ">=7.0"
             },
             "replace": {
                 "tightenco/collect": "self.version"
             },
             "suggest": {
                 "illuminate/filesystem": "Required to use the composer class (5.2.*).",
-                "symfony/process": "Required to use the composer class (~3.2).",
-                "symfony/var-dumper": "Required to use the dd function (~3.2)."
+                "symfony/process": "Required to use the composer class (~3.3).",
+                "symfony/var-dumper": "Required to use the dd function (~3.3)."
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "5.4-dev"
+                    "dev-master": "5.5-dev"
                 }
             },
             "autoload": {
@@ -551,7 +552,7 @@
             ],
             "description": "The Illuminate Support package.",
             "homepage": "https://laravel.com",
-            "time": "2017-06-15 12:35:32"
+            "time": "2017-08-29 07:40:48"
         },
         {
             "name": "nesbot/carbon",
@@ -607,33 +608,32 @@
             "time": "2017-01-16 07:55:07"
         },
         {
-            "name": "paragonie/random_compat",
-            "version": "v2.0.10",
+            "name": "psr/container",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d"
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/634bae8e911eefa89c1abfbf1b66da679ac8f54d",
-                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.2.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "4.*|5.*"
-            },
-            "suggest": {
-                "ext-libsodium": "Provides a modern crypto API that can be used to generate random bytes."
+                "php": ">=5.3.0"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
             "autoload": {
-                "files": [
-                    "lib/random.php"
-                ]
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -641,18 +641,20 @@
             ],
             "authors": [
                 {
-                    "name": "Paragon Initiative Enterprises",
-                    "email": "security@paragonie.com",
-                    "homepage": "https://paragonie.com"
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
                 }
             ],
-            "description": "PHP 5.x polyfill for random_bytes() and random_int() from PHP 7",
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
             "keywords": [
-                "csprng",
-                "pseudorandom",
-                "random"
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
             ],
-            "time": "2017-03-13 16:27:32"
+            "time": "2017-02-14 16:28:37"
         },
         {
             "name": "psr/http-message",
@@ -752,21 +754,69 @@
             "time": "2016-10-10 12:19:37"
         },
         {
-            "name": "symfony/console",
-            "version": "v3.3.6",
+            "name": "psr/simple-cache",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/console.git",
-                "reference": "b0878233cb5c4391347e5495089c7af11b8e6201"
+                "url": "https://github.com/php-fig/simple-cache.git",
+                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/b0878233cb5c4391347e5495089c7af11b8e6201",
-                "reference": "b0878233cb5c4391347e5495089c7af11b8e6201",
+                "url": "https://api.github.com/repos/php-fig/simple-cache/zipball/753fa598e8f3b9966c886fe13f370baa45ef0e24",
+                "reference": "753fa598e8f3b9966c886fe13f370baa45ef0e24",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\SimpleCache\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interfaces for simple caching",
+            "keywords": [
+                "cache",
+                "caching",
+                "psr",
+                "psr-16",
+                "simple-cache"
+            ],
+            "time": "2017-01-02 13:31:39"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v3.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "d6596cb5022b6a0bd940eae54a1de78646a5fda6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/d6596cb5022b6a0bd940eae54a1de78646a5fda6",
+                "reference": "d6596cb5022b6a0bd940eae54a1de78646a5fda6",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8",
                 "symfony/debug": "~2.8|~3.0",
                 "symfony/polyfill-mbstring": "~1.0"
             },
@@ -779,7 +829,6 @@
                 "symfony/dependency-injection": "~3.3",
                 "symfony/event-dispatcher": "~2.8|~3.0",
                 "symfony/filesystem": "~2.8|~3.0",
-                "symfony/http-kernel": "~2.8|~3.0",
                 "symfony/process": "~2.8|~3.0"
             },
             "suggest": {
@@ -818,24 +867,24 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-29 21:27:59"
+            "time": "2017-08-27 14:52:21"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.3.6",
+            "version": "v3.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "7c13ae8ce1e2adbbd574fc39de7be498e1284e13"
+                "reference": "084d804fe35808eb2ef596ec83d85d9768aa6c9d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/7c13ae8ce1e2adbbd574fc39de7be498e1284e13",
-                "reference": "7c13ae8ce1e2adbbd574fc39de7be498e1284e13",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/084d804fe35808eb2ef596ec83d85d9768aa6c9d",
+                "reference": "084d804fe35808eb2ef596ec83d85d9768aa6c9d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9",
+                "php": "^5.5.9|>=7.0.8",
                 "psr/log": "~1.0"
             },
             "conflict": {
@@ -874,7 +923,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-28 15:27:31"
+            "time": "2017-08-27 14:52:21"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -937,20 +986,20 @@
         },
         {
             "name": "symfony/process",
-            "version": "v3.3.6",
+            "version": "v3.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "07432804942b9f6dd7b7377faf9920af5f95d70a"
+                "reference": "b7666e9b438027a1ea0e1ee813ec5042d5d7f6f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/07432804942b9f6dd7b7377faf9920af5f95d70a",
-                "reference": "07432804942b9f6dd7b7377faf9920af5f95d70a",
+                "url": "https://api.github.com/repos/symfony/process/zipball/b7666e9b438027a1ea0e1ee813ec5042d5d7f6f0",
+                "reference": "b7666e9b438027a1ea0e1ee813ec5042d5d7f6f0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9"
+                "php": "^5.5.9|>=7.0.8"
             },
             "type": "library",
             "extra": {
@@ -982,24 +1031,24 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-13 13:05:09"
+            "time": "2017-07-29 21:54:42"
         },
         {
             "name": "symfony/translation",
-            "version": "v3.3.6",
+            "version": "v3.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
-                "reference": "35dd5fb003c90e8bd4d8cabdf94bf9c96d06fdc3"
+                "reference": "add53753d978f635492dfe8cd6953f6a7361ef90"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation/zipball/35dd5fb003c90e8bd4d8cabdf94bf9c96d06fdc3",
-                "reference": "35dd5fb003c90e8bd4d8cabdf94bf9c96d06fdc3",
+                "url": "https://api.github.com/repos/symfony/translation/zipball/add53753d978f635492dfe8cd6953f6a7361ef90",
+                "reference": "add53753d978f635492dfe8cd6953f6a7361ef90",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5.9",
+                "php": "^5.5.9|>=7.0.8",
                 "symfony/polyfill-mbstring": "~1.0"
             },
             "conflict": {
@@ -1047,7 +1096,7 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-24 16:45:30"
+            "time": "2017-07-29 21:54:42"
         },
         {
             "name": "vlucas/phpdotenv",

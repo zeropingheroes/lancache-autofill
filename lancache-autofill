@@ -6,6 +6,8 @@ use Illuminate\Console\Application;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Events\Dispatcher;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Zeropingheroes\LancacheAutofill\Commands\App\{
     InitialiseDatabase, InitialiseDownloadsDirectory
 };
@@ -32,7 +34,7 @@ $dotenv->required(['DOWNLOADS_DIRECTORY', 'STEAMCMD_PATH']);
 //}
 
 // Set up the console app
-$app = new Application(new Container, new Dispatcher, '5.4');
+$app = new Application(new Container, new Dispatcher, '5.5');
 
 // Set up the SQLite database connection
 $capsule = new Capsule;
@@ -58,4 +60,4 @@ $app->add(new Initialise);
 $app->add(new StartDownloading);
 
 // Run the console app
-$app->run();
+$app->run(new ArgvInput(), new ConsoleOutput());
