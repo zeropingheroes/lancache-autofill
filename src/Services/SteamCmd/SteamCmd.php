@@ -183,6 +183,7 @@ class SteamCmd
             ];
         }
 
+        // TODO: change login method to accept 3 parameters
         // Login using username and password (Steam Guard disabled)
         if ($this->username && $this->password && !$this->guard) {
             $arguments = [
@@ -201,6 +202,7 @@ class SteamCmd
         $arguments['@sSteamCmdForcePlatformType'] = $this->platform ?? 'windows';
 
         // Set SteamCMD arguments
+        // TODO: Set arguments as each method is called
         $arguments['force_install_dir'] = $this->directory;
         $arguments['app_license_request'] = $this->appId;
         $arguments['app_update'] = $this->appId;

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: ilumos
- * Date: 30/08/2017
- * Time: 22:00
- */
 
 namespace Zeropingheroes\LancacheAutofill\Services\SteamCmd\Exceptions;
 
