@@ -4,6 +4,8 @@ namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Symfony\Component\Console\Helper\Table;
+
 
 class SearchApps extends Command
 {
@@ -32,8 +34,13 @@ class SearchApps extends Command
             ->where('name', 'like', '%'.$this->argument('name').'%')
             ->get();
 
+        $table = new Table($this->output);
+        $table->setHeaders(['App ID', 'Name']);
+
         foreach ($apps as $app) {
-            $this->info($app->id."\t".$app->name);
+            $table->addRow([$app->id, $app->name]);
         }
+
+        $table->render();
     }
 }
