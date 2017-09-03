@@ -13,6 +13,8 @@ apt install -y  lib32gcc1 \
                 php7.0-sqlite \
                 composer \
                 expect \
+                zip \
+                unzip \
 
 printf "${GREEN}Installing dependencies with Composer${BLACK}\n"
 cd $SCRIPT_DIR && composer install
