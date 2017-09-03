@@ -4,6 +4,8 @@ namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 
 use Illuminate\Console\Command;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Symfony\Component\Console\Helper\Table;
+
 
 class ShowQueue extends Command
 {
@@ -85,11 +87,13 @@ class ShowQueue extends Command
         $this->{$messageStyle}(ucfirst($status).':');
 
         // TODO: Show app name
-        // TODO: Tabulate
-        $this->{$messageStyle}("DB ID\tApp ID\tPlatform\tMessage");
+        $table = new Table($this->output);
+        $table->setHeaders(['DB ID', 'App ID', 'Platform', 'Message']);
+
         foreach ($queue as $item) {
-            $this->{$messageStyle}($item->id."\t".$item->app_id."\t".$item->platform."\t".$item->message);
+            $table->addRow([$item->id, $item->app_id, $item->platform, $item->message]);
         }
+        $table->render();
     }
 
 }
