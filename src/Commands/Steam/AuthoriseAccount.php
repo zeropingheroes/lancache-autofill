@@ -3,8 +3,8 @@
 namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Process\Process;
 use Zeropingheroes\LancacheAutofill\Models\SteamAccount;
+use Zeropingheroes\LancacheAutofill\Services\SteamCmd\SteamCmd;
 
 class AuthoriseAccount extends Command
 {
@@ -31,28 +31,24 @@ class AuthoriseAccount extends Command
     {
         $account = $this->argument('account');
 
-        if( ! $account ){
+        if (!$account) {
             $account = $this->ask('Please enter your Steam username');
         }
 
         $this->info('Authorising account '.$account);
         $password = $this->secret('Please enter your password');
-        $steamGuardCode = $this->ask('Please enter your Steam Guard code', false);
+        $guard = $this->ask('Please enter your Steam Guard code (optional)', false);
 
-        // Start SteamCMD with the arguments, using "unbuffer"
-        // as SteamCMD buffers output when it is not run in a
-        // tty, which prevents us showing output line by line
-        $process = new Process('unbuffer '.getenv('STEAMCMD_PATH').' +login '.$account.' '.$password.' '.$steamGuardCode.' +quit');
-
-        // Set a short timeout for this interactive login prompt
-        $process->setTimeout(120);
+        $steamCmd = (new SteamCmd(getenv('STEAMCMD_PATH')))
+            ->login($account, $password, $guard)
+            ->run();
 
         // Show SteamCMD output line by line
-        $process->run(function ($type, $buffer) {
+        $steamCmd->run(function ($type, $buffer) {
             $this->line(str_replace(["\r", "\n"], '', $buffer));
         });
 
-        if (!$process->isSuccessful()) {
+        if (!$steamCmd->isSuccessful()) {
             $this->error('Failed to authorise Steam account '.$account);
             die();
         }
