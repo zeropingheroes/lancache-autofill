@@ -3,6 +3,7 @@
 namespace Zeropingheroes\LancacheAutofill\Services\SteamCmd;
 
 use InvalidArgumentException;
+use Symfony\Component\Process\Process;
 use Zeropingheroes\LancacheAutofill\Services\SteamCmd\Exceptions\SteamCmdException;
 
 class SteamCmd
@@ -15,45 +16,17 @@ class SteamCmd
     private $steamCmdPath;
 
     /**
-     * The Steam account username
-     *
-     * @var $username
-     */
-    private $username = 'anonymous';
-
-    /**
-     * The Steam account password
-     *
-     * @var $password
-     */
-    private $password;
-
-    /**
-     * The Steam account SteamGuard code
-     *
-     * @var $guard
-     */
-    private $guard;
-
-    /**
      * The Steam app ID to perform an action on
      * @var $appId
      */
     private $appId;
 
     /**
-     * The platform to download an app for
+     * The arguments to execute SteamCMD with
      *
-     * @var $platform
+     * @var $arguments
      */
-    private $platform;
-
-    /**
-     * The directory to install or validate an app
-     *
-     * @var $directory
-     */
-    private $directory;
+    private $arguments = [];
 
     /**
      * The permissible platforms.
@@ -64,12 +37,7 @@ class SteamCmd
 
     public function __construct(string $steamCmdPath)
     {
-        if (!file_exists($steamCmdPath)) {
-            throw new InvalidArgumentException('The specified path does not exist');
-        }
-
         $this->steamCmdPath = $steamCmdPath;
-
     }
 
     /**
@@ -78,35 +46,25 @@ class SteamCmd
      * @param $username
      * @return $this
      */
-    public function login(string $username)
+    public function login(string $username, string $password = '', string $guard = '')
     {
-        $this->username = $username;
+        // Login using cached credentials
+        if ($username && !$password) {
+            $this->addArgument('login', $username);
+        }
 
-        return $this;
-    }
+        // Login using username and password (Steam Guard disabled)
+        if ($username && $password && !$guard) {
+            $this->addArgument('login', "$username $password");
+        }
 
-    /**
-     * Set the Steam account password
-     *
-     * @param $password
-     * @return $this
-     */
-    public function password(string $password)
-    {
-        $this->password = $password;
+        // Login using username, password and Steam Guard code
+        if ($username && $password && $guard) {
+            $this->addArgument('login', "$username $password $guard");
+        }
 
-        return $this;
-    }
-
-    /**
-     * Set the Steam account SteamGuard code
-     *
-     * @param $guard
-     * @return $this
-     */
-    public function guard(string $guard)
-    {
-        $this->guard = $guard;
+        // Regardless of how the user is logging in, do not prompt for password interactively
+        $this->addArgument('@NoPromptForPassword', 1);
 
         return $this;
     }
@@ -133,18 +91,18 @@ class SteamCmd
      */
     public function platform(string $platform)
     {
-        if (array_diff($platform, $this::PLATFORMS)) {
+        if (!in_array($platform, $this::PLATFORMS)) {
             throw new InvalidArgumentException('Invalid platform specified. Available platforms are: '.implode(' ',
                     $this::PLATFORMS));
         }
 
-        $this->platform = $platform;
+        $this->addArgument('@sSteamCmdForcePlatformType', $platform);
 
         return $this;
     }
 
     /**
-     * Set the directory to use for installing
+     * Set the directory to use for installing or validating
      *
      * @param $directory
      * @return $this
@@ -152,77 +110,90 @@ class SteamCmd
      */
     public function directory(string $directory)
     {
-        if (!is_writable($directory)) {
-            throw new InvalidArgumentException('Specified install directory is not writable');
-        }
-        $this->directory = $directory;
+        $this->addArgument('force_install_dir', $directory);
 
         return $this;
     }
 
     /**
      * Install or update the specified app
+     *
+     * @param int $appId the appID to update
+     * @return Process
+     * @throws SteamCmdException
      */
-    public function update()
+    public function update(int $appId)
     {
-        $arguments = [];
-
-        if (!$this->appId) {
-            throw new SteamCmdException('No app ID specified to install or update');
+        if (!array_key_exists('force_install_dir', $this->arguments)) {
+            throw new SteamCmdException('No directory specified');
         }
 
-        if (!$this->directory) {
-            throw new SteamCmdException('No directory specified to install into or update');
+        // If no platform is specified, default to windows
+        if (!array_key_exists('@sSteamCmdForcePlatformType', $this->arguments)) {
+            $this->addArgument('@sSteamCmdForcePlatformType', 'windows');
         }
 
-        // Login using cached credentials
-        if ($this->username && !$this->password) {
-            $arguments = [
-                'login' => $this->username,
-                '@NoPromptForPassword' => 1,
-            ];
-        }
+        // Request a license for the app, to ensure free apps are downloaded
+        $this->addArgument('app_license_request', $appId);
 
-        // TODO: change login method to accept 3 parameters
-        // Login using username and password (Steam Guard disabled)
-        if ($this->username && $this->password && !$this->guard) {
-            $arguments = [
-                'login' => $this->username.' '.$this->password,
-            ];
-        }
+        // Specify which app to update
+        $this->addArgument('app_update', $appId);
 
-        // Login using username, password and Steam Guard code
-        if ($this->username && $this->password && $this->guard) {
-            $arguments = [
-                'login' => $this->username.' '.$this->password.' '.$this->guard,
-            ];
-        }
+        return $this;
+    }
 
-        // If no platform specified, default to Windows
-        $arguments['@sSteamCmdForcePlatformType'] = $this->platform ?? 'windows';
-
-        // Set SteamCMD arguments
-        // TODO: Set arguments as each method is called
-        $arguments['force_install_dir'] = $this->directory;
-        $arguments['app_license_request'] = $this->appId;
-        $arguments['app_update'] = $this->appId;
-        $arguments['quit'] = null;
-
-        // Build argument string
-        foreach ($arguments as $argument => $value) {
-            $argumentString .= "+$argument $value ";
-        }
+    /**
+     * Run SteamCMD with the arguments
+     *
+     * @param int $timeout
+     * @param int $idleTimeout
+     *
+     * @return Process
+     */
+    public function run($timeout = 14400, $idleTimeout = 60)
+    {
+        // Always quit when finished
+        $this->addArgument('quit');
 
         // Start SteamCMD with the arguments, using "unbuffer"
         // as SteamCMD buffers output when it is not run in a
         // tty, which prevents us showing output line by line
-        $update = new Process('unbuffer '.$this->steamCmdPath.' '.$argumentString);
+        $process = new Process("unbuffer $this->steamCmdPath {$this->arguments()}");
 
-        // Set a long timeout as updating could take a while
-        $update->setTimeout(14400);
-        $update->setIdleTimeout(60);
+        $process->setTimeout($timeout);
+        $process->setIdleTimeout($idleTimeout);
 
         // Return the process, allowing the client to execute it
-        return $update;
+        return $process;
     }
+
+    /**
+     * Add an argument
+     *
+     * @param string $argument
+     * @param string $value
+     * @return void
+     */
+    private function addArgument(string $argument, $value = '')
+    {
+        $this->arguments[$argument] = $value;
+    }
+
+    /**
+     * Get the formatted arguments ready for execution
+     *
+     * @return string
+     */
+    private function arguments()
+    {
+        $arguments = '';
+        // Build argument string
+        foreach ($this->arguments as $argument => $value) {
+            $arguments .= "+$argument $value ";
+        }
+
+        return $arguments;
+    }
+
+
 }
