@@ -74,11 +74,19 @@ class StartDownloading extends Command
                     // Create an array of SteamCMD's output (removing excess newlines)
                     $lines = explode(PHP_EOL, trim($steamCmd->getOutput()));
 
-                    // Get the last line (removing ANSI codes)
-                    $lastLine = preg_replace('#\x1b\[[0-9;]*[a-zA-Z]#', '', end($lines));
+                    // Remove lines that don't contain the text "error"
+                    $linesContainingError = array_where($lines, function ($value, $key) {
+                        return str_contains(strtolower($value), 'error');
+                    });
+
+                    // Collect all errors
+                    $message = implode(PHP_EOL, $linesContainingError);
+
+                    // Removing ANSI codes
+                    $message = preg_replace('#\x1b\[[0-9;]*[a-zA-Z]#', '', $message);
 
                     $this->error('Failed to download '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
-                    $this->updateQueueItemStatus($item->id, 'failed', $lastLine);
+                    $this->updateQueueItemStatus($item->id, 'failed', $message);
                 }
             }
         }
