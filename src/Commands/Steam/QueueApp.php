@@ -3,7 +3,9 @@
 namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Zeropingheroes\LancacheAutofill\Models\{
+    SteamApp, SteamQueueItem
+};
 
 class QueueApp extends Command
 {
@@ -14,7 +16,9 @@ class QueueApp extends Command
      */
     protected $signature = 'steam:queue-app
                             {app_id : The ID of the app}
-                            {platforms=windows : Comma separated list of platforms to download the app for [windows, osx, linux]}';
+                            {--windows=true : Queue the Windows version of the app}
+                            {--osx : Queue the OS X version of the app}
+                            {--linux : Queue the Linux version of the app}';
 
     /**
      * The console command description.
@@ -24,56 +28,53 @@ class QueueApp extends Command
     protected $description = 'Queue a Steam app for downloading';
 
     /**
-     * The permissible platforms.
-     *
-     * @var array
-     */
-    const PLATFORMS = ['windows', 'osx', 'linux'];
-
-    /**
      * Execute the console command.
      *
      * @return mixed
      */
     public function handle()
     {
-        // If no platforms are specified, default to windows
-        $platforms = explode(',', $this->argument('platforms')) ?? ['windows'];
+        $appId = $this->argument('app_id');
 
-        if (array_diff($platforms, $this::PLATFORMS)) {
-            $this->error('Invalid platform(s) specified. Available platforms are: '.implode(' ', $this::PLATFORMS));
-            die();
-        }
-
-        // Check if app with specified ID exists
-        $app = Capsule::table('steam_apps')
-            ->where('id', $this->argument('app_id'))
-            ->first();
-
-        if (!$app) {
+        if (!$app = SteamApp::find($appId)) {
             $this->error('Steam app with ID '.$this->argument('app_id').' not found');
             die();
         }
 
+        // Add platforms depending on options
+        if ($this->option('windows')) {
+            $platforms[] = 'windows';
+        }
+
+        if ($this->option('osx')) {
+            $platforms[] = 'osx';
+        }
+
+        if ($this->option('linux')) {
+            $platforms[] = 'linux';
+        }
+
         // Queue each platform separately
         foreach ($platforms as $platform) {
-            $alreadyQueued = Capsule::table('steam_queue')
-                ->where('app_id', $app->id)
+
+            $alreadyQueued = SteamQueueItem::where('app_id', $app->id)
                 ->where('platform', $platform)
-                ->count();
+                ->first();
+
             if ($alreadyQueued) {
-                $this->error('Steam app "'.$app->name.'" on platform "'.$platform.'" already in download queue');
+                $this->error('Steam app "'.$app->name.'" on platform "'.ucfirst($platform).'" already in download queue');
                 continue;
             }
 
             // Add the app to the download queue, specifying the platform and account
-            Capsule::table('steam_queue')->insert([
-                'app_id' => $app->id,
-                'platform' => $platform,
-                'status' => 'queued',
-            ]);
+            $steamQueueItem = new SteamQueueItem;
+            $steamQueueItem->app_id = $app->id;
+            $steamQueueItem->platform = $platform;
+            $steamQueueItem->status = 'queued';
 
-            $this->info('Added Steam app "'.$app->name.'" on platform "'.$platform.'" to download queue');
+            if ($steamQueueItem->save()) {
+                $this->info('Added Steam app "'.$app->name.'" on platform "'.ucfirst($platform).'" to download queue');
+            }
 
         }
 

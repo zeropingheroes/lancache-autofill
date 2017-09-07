@@ -72,12 +72,11 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * Authorise a Steam account to allow download of apps in their library.
 * If no account is specified, the `DEFAULT_STEAM_USER` account is used
 
-`steam:queue-app appid [platform(s)] [--account=account]`
+`steam:queue-app appid [--windows] [--osx] [--linux]`
 
 * Queue a Steam app for downloading.
-* Optionally the platform(s) to download can be specified as a comma-separated list
-* Available platforms are: windows, osx, linux
-* If no platform is specified, the Windows version of the app will be queued
+* Optionally the platform(s) to download can be specified as options
+* If no platform option is specified, the Windows version of the app will be queued
 
 `steam:dequeue [--app_id=] [--platform=] [--account=] [--status=]`
 
