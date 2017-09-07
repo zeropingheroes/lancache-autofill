@@ -3,8 +3,8 @@
 namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Console\Helper\Table;
+use Zeropingheroes\LancacheAutofill\Models\SteamQueueItem;
 
 
 class ShowQueue extends Command
@@ -75,23 +75,26 @@ class ShowQueue extends Command
                 $messageStyle = 'info';
         }
 
-        $queue = Capsule::table('steam_queue')
-            ->where('status', $status)
+        $steamQueueItems = SteamQueueItem::where('status', $status)
             ->orderBy('message')
             ->get();
 
-        if (!count($queue)) {
+        if (!count($steamQueueItems)) {
             return;
         }
 
         $this->{$messageStyle}(ucfirst($status).':');
 
-        // TODO: Show app name
         $table = new Table($this->output);
-        $table->setHeaders(['DB ID', 'App ID', 'Platform', 'Message']);
+        $table->setHeaders(['Name', 'Platform', 'App ID', 'Message']);
 
-        foreach ($queue as $item) {
-            $table->addRow([$item->id, $item->app_id, $item->platform, $item->message]);
+        foreach ($steamQueueItems as $steamQueueItem) {
+            $table->addRow([
+                $steamQueueItem->app->name,
+                ucfirst($steamQueueItem->platform),
+                $steamQueueItem->app_id,
+                $steamQueueItem->message,
+            ]);
         }
         $table->render();
     }
