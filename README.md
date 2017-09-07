@@ -70,7 +70,7 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 `steam:authorise-account [account]`
 
 * Authorise a Steam account to allow download of apps in their library.
-* If no account is specified, the `DEFAULT_STEAM_USER` account is used
+* If no account is specified, you will be prompted for the username
 
 `steam:queue-app appid [--windows] [--osx] [--linux]`
 
@@ -78,10 +78,10 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * Optionally the platform(s) to download can be specified as options
 * If no platform option is specified, the Windows version of the app will be queued
 
-`steam:dequeue [--app_id=] [--platform=] [--account=] [--status=]`
+`steam:dequeue [--app_id=] [--platform=] [--status=]`
 
 * Dequeue a items from the download queue.
-* Optionally specify any combination of app ID, platform, account and status
+* Optionally specify any combination of app ID, platform and status
 * Calling with no arguments clears the queue
 
 `steam:requeue [status=failed]`
@@ -118,7 +118,7 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 
 * [SteamCMD Reference](https://developer.valvesoftware.com/wiki/SteamCMD)
 * [SteamCMD Commands and Variables](https://github.com/dgibbs64/SteamCMD-Commands-List/blob/master/steamcmdcommands.txt)
-* [Laravel Query Builder](https://laravel.com/docs/5.4/queries)
-* [Laravel Artisan Console](https://laravel.com/docs/5.4/artisan)
+* [Laravel Query Builder](https://laravel.com/docs/5.5/queries)
+* [Laravel Artisan Console](https://laravel.com/docs/5.5/artisan)
 * [Symfony Process Component](http://symfony.com/doc/current/components/process.html)
 * [dotenv Reference](https://github.com/vlucas/phpdotenv/blob/master/README.md)
