@@ -78,10 +78,10 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * Optionally the platform(s) to download can be specified as options
 * If no platform option is specified, the Windows version of the app will be queued
 
-`steam:dequeue [--app_id=] [--platform=] [--status=]`
+`steam:dequeue [--app_id=] [--platform=] [--status=] [--message=]`
 
 * Dequeue a items from the download queue.
-* Optionally specify any combination of app ID, platform and status
+* Optionally specify any combination of app ID, platform, status and message
 * Calling with no arguments clears the queue
 
 `steam:requeue [status=failed] [--message=]`
