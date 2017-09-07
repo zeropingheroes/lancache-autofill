@@ -15,7 +15,8 @@ class Dequeue extends Command
     protected $signature = 'steam:dequeue
                             {--app_id=}
                             {--platform=}
-                            {--status=}';
+                            {--status=}
+                            {--message=}';
     /**
      * The console command description.
      *
@@ -66,6 +67,10 @@ class Dequeue extends Command
 
         if ($this->option('status')) {
             $query->where('status', $this->option('status'));
+        }
+
+        if ($this->option('message')) {
+            $query->where('message', 'like', '%'.$this->option('message').'%');
         }
 
         // If no options were specified, ask for confirmation
