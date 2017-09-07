@@ -47,7 +47,21 @@ class StartDownloading extends Command
                 $this->info('Starting download of '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
 
                 try {
-                    $this->download($item->app_id, $item->platform, $account);
+                    $steamCmd = (new SteamCmd(getenv('STEAMCMD_PATH')))
+                        ->login($account)
+                        ->platform($item->platform)
+                        ->directory(getenv('DOWNLOADS_DIRECTORY').'/'.$item->platform.'/'.$item->app_id)
+                        ->update($item->app_id)
+                        ->run();
+
+                    // Show SteamCMD output line by line
+                    $steamCmd->run(function ($type, $buffer) {
+                        $this->line(str_replace(["\r", "\n"], '', $buffer));
+                    });
+
+                    if (!$steamCmd->isSuccessful()) {
+                        throw new ProcessFailedException($steamCmd);
+                    }
 
                     $this->info('Successfully completed download of '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
                     $this->updateQueueItemStatus($item->id, 'completed');
@@ -58,7 +72,7 @@ class StartDownloading extends Command
                 } catch (ProcessFailedException $e) {
 
                     // Create an array of SteamCMD's output (removing excess newlines)
-                    $lines = explode(PHP_EOL, trim($process->getOutput()));
+                    $lines = explode(PHP_EOL, trim($steamCmd->getOutput()));
 
                     // Get the last line (removing ANSI codes)
                     $lastLine = preg_replace('#\x1b\[[0-9;]*[a-zA-Z]#', '', end($lines));
@@ -117,33 +131,6 @@ class StartDownloading extends Command
     private function steamAccounts()
     {
         return Capsule::table('steam_accounts')->pluck('username');
-    }
-
-    /**
-     * Start a Steam download
-     *
-     * @param $appId
-     * @param $platform
-     * @param $account
-     * @throws ProcessFailedException
-     */
-    private function download($appId, $platform, $account)
-    {
-        $steamCmd = (new SteamCmd(getenv('STEAMCMD_PATH')))
-            ->login($account)
-            ->platform($platform)
-            ->directory(getenv('DOWNLOADS_DIRECTORY').'/'.$platform.'/'.$appId)
-            ->update($appId)
-            ->run();
-
-        // Show SteamCMD output line by line
-        $steamCmd->run(function ($type, $buffer) {
-            $this->line(str_replace(["\r", "\n"], '', $buffer));
-        });
-
-        if (!$steamCmd->isSuccessful()) {
-            throw new ProcessFailedException($steamCmd);
-        }
     }
 
     /**
