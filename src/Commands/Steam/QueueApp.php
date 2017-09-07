@@ -15,7 +15,7 @@ class QueueApp extends Command
      * @var string
      */
     protected $signature = 'steam:queue-app
-                            {app_id : The ID of the app}
+                            {app_ids* : One or more app IDs to queue}
                             {--windows=true : Queue the Windows version of the app}
                             {--osx : Queue the OS X version of the app}
                             {--linux : Queue the Linux version of the app}';
@@ -34,50 +34,51 @@ class QueueApp extends Command
      */
     public function handle()
     {
-        $appId = $this->argument('app_id');
+        $appIds = $this->argument('app_ids');
 
-        if (!$app = SteamApp::find($appId)) {
-            $this->error('Steam app with ID '.$this->argument('app_id').' not found');
-            die();
-        }
-
-        // Add platforms depending on options
-        if ($this->option('windows')) {
-            $platforms[] = 'windows';
-        }
-
-        if ($this->option('osx')) {
-            $platforms[] = 'osx';
-        }
-
-        if ($this->option('linux')) {
-            $platforms[] = 'linux';
-        }
-
-        // Queue each platform separately
-        foreach ($platforms as $platform) {
-
-            $alreadyQueued = SteamQueueItem::where('app_id', $app->id)
-                ->where('platform', $platform)
-                ->first();
-
-            if ($alreadyQueued) {
-                $this->error('Steam app "'.$app->name.'" on platform "'.ucfirst($platform).'" already in download queue');
-                continue;
+        foreach($appIds as $appId)
+        {
+            if (!$app = SteamApp::find($appId)) {
+                $this->error('Steam app with ID '.$appId.' not found');
+                die();
             }
 
-            // Add the app to the download queue, specifying the platform and account
-            $steamQueueItem = new SteamQueueItem;
-            $steamQueueItem->app_id = $app->id;
-            $steamQueueItem->platform = $platform;
-            $steamQueueItem->status = 'queued';
-
-            if ($steamQueueItem->save()) {
-                $this->info('Added Steam app "'.$app->name.'" on platform "'.ucfirst($platform).'" to download queue');
+            // Add platforms depending on options
+            if ($this->option('windows')) {
+                $platforms[] = 'windows';
             }
 
+            if ($this->option('osx')) {
+                $platforms[] = 'osx';
+            }
+
+            if ($this->option('linux')) {
+                $platforms[] = 'linux';
+            }
+
+            // Queue each platform separately
+            foreach ($platforms as $platform) {
+
+                $alreadyQueued = SteamQueueItem::where('app_id', $app->id)
+                    ->where('platform', $platform)
+                    ->first();
+
+                if ($alreadyQueued) {
+                    $this->error('Steam app "'.$app->name.'" on platform "'.ucfirst($platform).'" already in download queue');
+                    continue;
+                }
+
+                // Add the app to the download queue, specifying the platform and account
+                $steamQueueItem = new SteamQueueItem;
+                $steamQueueItem->app_id = $app->id;
+                $steamQueueItem->platform = $platform;
+                $steamQueueItem->status = 'queued';
+
+                if ($steamQueueItem->save()) {
+                    $this->info('Added Steam app "'.$app->name.'" on platform "'.ucfirst($platform).'" to download queue');
+                }
+
+            }
         }
-
-
     }
 }
