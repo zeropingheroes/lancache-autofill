@@ -84,10 +84,11 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * Optionally specify any combination of app ID, platform and status
 * Calling with no arguments clears the queue
 
-`steam:requeue [status=failed]`
+`steam:requeue [status=failed] [--message=]`
 
 * Requeue failed and/or completed items in the download queue.
 * By default failed items are requeued
+* Optionally only requeue items whose message contains the specified value
 
 `steam:search-apps name`
 

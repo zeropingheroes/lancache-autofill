@@ -13,7 +13,8 @@ class Requeue extends Command
      * @var string
      */
     protected $signature = 'steam:requeue
-                            {status=failed}';
+                            {status=failed : Only requeue items of a specific status}
+                            {--message= : Only requeue items whose message contains the specified value}';
     /**
      * The console command description.
      *
@@ -45,6 +46,10 @@ class Requeue extends Command
 
         if ($this->argument('status')) {
             $query->where('status', $this->argument('status'));
+        }
+
+        if ($this->option('message')) {
+            $query->where('message', 'like', '%'.$this->option('message').'%');
         }
 
         $affected = $query->update([
