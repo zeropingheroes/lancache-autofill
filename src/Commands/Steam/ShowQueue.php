@@ -42,6 +42,10 @@ class ShowQueue extends Command
             die();
         }
 
+        if( ! SteamQueueItem::count()) {
+            $this->info('Steam queue is empty');
+        }
+
         // If a status is specified, display only apps of that status
         if ($this->argument('status')) {
             $this->displayAppsWithStatus($this->argument('status'));
