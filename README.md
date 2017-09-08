@@ -2,10 +2,13 @@
 Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with the content of your choosing, so that subsequent downloads for the same content will be served from the lancache, improving speeds and reducing load on your internet connection.
 
 # Features
+* Queue the top 1 to 100 popular apps on Steam, or just the free apps
+* Queue a specific app by ID
 * Choose which platform(s) to download an app for
 * Use multiple Steam accounts to download apps
 * See which apps downloaded successfully
 * See which apps failed, and what the error message was
+* Retry downloading of failed apps 
 
 # Requirements
 * A working [lancache](https://github.com/zeropingheroes/lancache)
