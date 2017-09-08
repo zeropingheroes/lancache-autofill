@@ -12,7 +12,7 @@ use Zeropingheroes\LancacheAutofill\Commands\App\{
     InitialiseDatabase, InitialiseDownloadsDirectory
 };
 use Zeropingheroes\LancacheAutofill\Commands\Steam\{
-    AuthoriseAccount, Dequeue, Initialise, QueueApp, Requeue, SearchApps, ShowQueue, StartDownloading, UpdateAppList
+    AuthoriseAccount, Dequeue, Initialise, QueueApp, QueuePopularApps, Requeue, SearchApps, ShowQueue, StartDownloading, UpdateAppList
 };
 
 // Load Composer's autoloader
@@ -27,11 +27,6 @@ else {
 $dotenv = new Dotenv(__DIR__);
 $dotenv->load();
 $dotenv->required(['DOWNLOADS_DIRECTORY', 'STEAMCMD_PATH']);
-
-// TODO: Move to class so existance of SteamCMD can be checked at the appropriate time
-//if (!file_exists(getenv('STEAMCMD_PATH'))) {
-//    die('SteamCMD not found - please check the STEAMCMD_PATH environment variable is set correctly');
-//}
 
 // Set up the console app
 $app = new Application(new Container, new Dispatcher, '5.5');
@@ -49,15 +44,16 @@ $capsule->bootEloquent();
 $app->add(new InitialiseDatabase);
 $app->add(new InitialiseDownloadsDirectory);
 
+$app->add(new Initialise);
 $app->add(new UpdateAppList);
 $app->add(new SearchApps);
 $app->add(new QueueApp);
+$app->add(new QueuePopularApps);
 $app->add(new ShowQueue);
+$app->add(new StartDownloading);
+$app->add(new AuthoriseAccount);
 $app->add(new Dequeue);
 $app->add(new Requeue);
-$app->add(new AuthoriseAccount);
-$app->add(new Initialise);
-$app->add(new StartDownloading);
 
 // Run the console app
 $app->run(new ArgvInput(), new ConsoleOutput());

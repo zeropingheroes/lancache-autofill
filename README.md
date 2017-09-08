@@ -78,6 +78,14 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * Optionally the platform(s) to download can be specified as options
 * If no platform option is specified, the Windows version of the app will be queued
 
+`steam:queue-popular-apps [top=100] [--free] [--windows] [--osx] [--linux]`
+
+* Queue the top most popular apps on Steam in the past 2 weeeks
+* Optionally
+    * Only queue top X apps (default 100)
+    * Only queue free apps
+    * Specify the platform(s) to download (default - windows)
+
 `steam:dequeue [--app_id=] [--platform=] [--status=] [--message=]`
 
 * Dequeue a items from the download queue.
