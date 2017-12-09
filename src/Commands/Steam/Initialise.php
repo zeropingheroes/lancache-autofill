@@ -12,7 +12,8 @@ class Initialise extends Command
      *
      * @var string
      */
-    protected $signature = 'steam:initialise';
+    protected $signature = 'steam:initialise
+                                {--yes : Suppress confirmations}';
 
     /**
      * The console command description.
@@ -37,19 +38,20 @@ class Initialise extends Command
     {
         $steamCmdDirectory = dirname(getenv('STEAMCMD_PATH'));
 
-        if ($this->confirm('Are you sure you wish to initialise SteamCMD"? This will remove the directory "'.$steamCmdDirectory.'"')) {
+        if ($this->option('yes') OR $this->confirm('Are you sure you wish to initialise SteamCMD"? This will remove the directory "' . $steamCmdDirectory . '"')) {
 
-            $process['remove'] = new Process('rm -rf '.$steamCmdDirectory);
-            $process['create'] = new Process('mkdir -p '.$steamCmdDirectory.' && cd '.$steamCmdDirectory.' && curl -sqL "'.self::STEAMCMD_URL.'" | tar zxvf -');
-            $process['run'] = new Process('unbuffer '.getenv('STEAMCMD_PATH').' +login anonymous +quit');
+            $this->info('Initialising SteamCMD');
+
+            $process['remove'] = new Process('rm -rf ' . $steamCmdDirectory);
+            $process['create'] = new Process('mkdir -p ' . $steamCmdDirectory . ' && cd ' . $steamCmdDirectory . ' && curl -sqL "' . self::STEAMCMD_URL . '" | tar zxvf -');
+            $process['run'] = new Process('unbuffer ' . getenv('STEAMCMD_PATH') . ' +login anonymous +quit');
 
             foreach ($process as $process) {
                 $process->run(function ($type, $buffer) {
 
                     if (Process::ERR === $type) {
                         $this->error(str_replace(["\r", "\n"], '', $buffer));
-                    }
-                    else {
+                    } else {
                         $this->line(str_replace(["\r", "\n"], '', $buffer));
                     }
 

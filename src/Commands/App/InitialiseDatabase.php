@@ -12,7 +12,8 @@ class InitialiseDatabase extends Command
      *
      * @var string
      */
-    protected $signature = 'app:initialise-database';
+    protected $signature = 'app:initialise-database
+                                {--yes : Suppress confirmations}';
 
     /**
      * The console command description.
@@ -29,7 +30,7 @@ class InitialiseDatabase extends Command
     public function handle()
     {
         if (Capsule::schema()->hasTable('steam_apps') OR Capsule::schema()->hasTable('steam_queue') OR Capsule::schema()->hasTable('steam_accounts')) {
-            if ($this->confirm('Are you sure you wish to clear all data in the database?')) {
+            if ($this->option('yes') OR $this->confirm('Are you sure you wish to clear all data in the database?')) {
                 $this->info('Removing existing database tables');
                 Capsule::schema()->dropIfExists('steam_apps');
                 Capsule::schema()->dropIfExists('steam_queue');
