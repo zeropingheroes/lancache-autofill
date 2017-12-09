@@ -20,7 +20,7 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * A working [lancache](https://github.com/zeropingheroes/lancache)
 * Ubuntu 16.04 x64, configured to download via the lancache
 * Sufficient disk space to (temporarily) store the downloaded content
-* PHP 7.0
+* Dependencies detailed in *Installation* section
 
 # Installation
 1. `apt update && apt install -y lib32gcc1 lib32stdc++6 lib32tinfo5 lib32ncurses5 php7.0-cli php7.0-mbstring php7.0-sqlite php7.0-bcmath composer expect zip unzip`
