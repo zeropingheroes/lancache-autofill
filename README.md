@@ -26,105 +26,31 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 1. `apt update && apt install -y lib32gcc1 lib32stdc++6 lib32tinfo5 lib32ncurses5 php7.0-cli php7.0-mbstring php7.0-sqlite php7.0-bcmath composer expect zip unzip`
 2. `git clone https://github.com/zeropingheroes/lancache-autofill.git && cd lancache-autofill`
 3. `./install.sh`
+4. Get a Steam API key from http://steamcommunity.com/dev/apikey and add it to the `.env` file
 
-# Quick Start
-1. Install and initialise SteamCMD:
+# Usage
 
-    `./lancache-autofill steam:initialise`
+    $ ./lancache-autofill
+    
+    Usage:
+    
+        lancache-autofill app:initialise-database
+        lancache-autofill app:initialise-downloads-directory
 
-2. Set the default Steam account to be used when queueing apps for download:
-
-    `nano .env`
-
-3. Search for the apps you wish to download to find their app ID:
-
-	`./lancache-autofill steam:search-apps "team fortress 2"`
-	
-	`440     Team Fortress 2
-	[...]`
-
-4. Queue the app for download by ID:
-
-    `./lancache-autofill steam:queue-app 440`
-
-5. Authorise your Steam account:
-
-    `./lancache-autofill steam:authorise-account`
-
-6. Start downloading items in the download queue:
-
-    `./lancache-autofill steam:start-downloading`
-
-7. View the download queue to see the status of the downloads:
-
-    `./lancache-autofill steam:show-queue`
-
-8. Clear the temporary download location:
-
-    `./lancache-autofill app:initialise-downloads-directory`
-
-# Command Reference
-`app:initialise-database`
-
-* Initialise the database.
-
-`app:initialise-downloads-directory`
-
-* Initialise the downloads directory.
-
-`steam:initialise`
-
-* Install and initialise SteamCMD
-
-`steam:authorise-account [account]`
-
-* Authorise a Steam account to allow download of apps in their library.
-* If no account is specified, you will be prompted for the username
-
-`steam:queue-app appid [appid, appid...] [--windows] [--osx] [--linux]`
-
-* Queue one or more Steam apps for downloading.
-* Optionally the platform(s) to download can be specified as options
-* If no platform option is specified, the Windows version of the app will be queued
-
-`steam:queue-popular-apps [top=100] [--free] [--windows] [--osx] [--linux]`
-
-* Queue the top most popular apps on Steam in the past 2 weeeks
-* Optionally
-    * Only queue top X apps (default 100)
-    * Only queue free apps
-    * Specify the platform(s) to download (default - windows)
-
-`steam:dequeue [--app_id=] [--platform=] [--status=] [--message=]`
-
-* Dequeue a items from the download queue.
-* Optionally specify any combination of app ID, platform, status and message
-* Calling with no arguments clears the queue
-
-`steam:requeue [status=failed] [--message=]`
-
-* Requeue failed and/or completed items in the download queue.
-* By default failed items are requeued
-* Optionally only requeue items whose message contains the specified value
-
-`steam:search-apps name`
-
-* Search Steam apps by name.
-
-`steam:show-queue [status]`
-
-* Show the Steam app download queue.
-* Optionally only show items with specified status
-* Available statuses are: queued, failed, completed
-
-`steam:start-downloading`
-
-* Start downloading the Steam apps in the queue.
-* The account(s) specified in the queue to download from are checked before any app downloads are attempted
-
-`steam:update-app-list`
-
-* Get the latest list of apps from Steam.
+        lancache-autofill steam:initialise
+        lancache-autofill steam:authorise-account [<account>]
+        lancache-autofill steam:update-app-list
+        
+	    lancache-autofill steam:search-apps <app name>
+        lancache-autofill steam:queue-app <app id> [<app id>...] [--windows=true] [--osx] [--linux]
+        lancache-autofill steam:queue-popular-apps [top=100] [--free] [--windows=true] [--osx] [--linux]
+        lancache-autofill steam:queue-users-recent-apps <steam id 64> [<steam id 64>...] [--windows=true] [--osx] [--linux]
+        lancache-autofill steam:queue-users-recent-apps <steam-ids.txt> [--windows=true] [--osx] [--linux]
+        
+        lancache-autofill steam:show-queue [<status>]
+        lancache-autofill steam:start-downloading
+        lancache-autofill steam:dequeue [--app_id=] [--platform=] [--status=] [--message=]
+        lancache-autofill steam:requeue [status=failed] [--message=]
 
 # Limitations & Known Issues
 * Steam is the only supported platform currently
