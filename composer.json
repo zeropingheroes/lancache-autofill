@@ -1,6 +1,7 @@
 {
     "require": {
         "illuminate/console": "5.5.*",
+        "illuminate/support": "5.5.*",
         "illuminate/container": "5.5.*",
         "illuminate/events": "5.5.*",
         "illuminate/database": "5.5.*",
