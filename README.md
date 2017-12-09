@@ -17,7 +17,7 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * PHP 7.0
 
 # Installation
-1. `apt update && apt install -y  lib32gcc1 lib32stdc++6 lib32tinfo5 lib32ncurses5 php7.0-cli php7.0-mbstring php7.0-sqlite composer expect zip unzip `
+1. `apt update && apt install -y lib32gcc1 lib32stdc++6 lib32tinfo5 lib32ncurses5 php7.0-cli php7.0-mbstring php7.0-sqlite php7.0-bcmath composer expect zip unzip`
 2. `git clone https://github.com/zeropingheroes/lancache-autofill.git && cd lancache-autofill`
 3. `./install.sh`
 
