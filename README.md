@@ -23,10 +23,11 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * Dependencies detailed in *Installation* section
 
 # Installation
-1. `apt update && apt install -y lib32gcc1 lib32stdc++6 lib32tinfo5 lib32ncurses5 php7.0-cli php7.0-mbstring php7.0-sqlite php7.0-bcmath composer expect zip unzip`
-2. `git clone https://github.com/zeropingheroes/lancache-autofill.git && cd lancache-autofill`
-3. `./install.sh`
-4. Get a Steam API key from http://steamcommunity.com/dev/apikey and add it to the `.env` file
+1. `sudo apt update -y` 
+2. `sudo apt install -y lib32gcc1 lib32stdc++6 lib32tinfo5 lib32ncurses5 php7.0-cli php7.0-mbstring php7.0-sqlite php7.0-bcmath composer expect zip unzip`
+3. `git clone https://github.com/zeropingheroes/lancache-autofill.git && cd lancache-autofill`
+4. `./install.sh`
+5. Get a Steam API key from http://steamcommunity.com/dev/apikey and add it to the `.env` file
 
 # Usage
 
