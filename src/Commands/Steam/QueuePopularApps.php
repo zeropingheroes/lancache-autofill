@@ -67,6 +67,8 @@ class QueuePopularApps extends Command
 
         $apps = json_decode($result->getBody(), true);
 
+        $i = 0;
+
         foreach ($apps as $appId => $app) {
             if ($free && $app['price'] != 0) {
                 continue;
