@@ -14,7 +14,7 @@ class QueueUsersRecentApps extends Command
      * @var string
      */
     protected $signature = 'steam:queue-users-recent-apps
-                            {user : The username or SteamId64 of the user whose apps to queue}
+                            {steamIds* : One or more SteamId64(s) for the user(s) whose apps to queue, or a file containing a list}
                             {--windows=true : Queue the Windows version of the apps}
                             {--osx : Queue the OS X version of the apps}
                             {--linux : Queue the Linux version of the apps}';
@@ -45,34 +45,40 @@ class QueueUsersRecentApps extends Command
         if ($this->option('linux')) {
             $platforms[] = 'linux';
         }
+        $steamIds = $this->argument('steamIds');
 
-        // Find the user
-        $user = Steam::player( $this->argument('user'));
+        if (file_exists($steamIds[0])) {
+            $steamIds = file_get_contents($steamIds[0]);
+            $steamIds = explode("\n", trim($steamIds));
+        }
 
-        $apps = $user->GetRecentlyPlayedGames();
+        foreach ($steamIds as $steamId64) {
+            $user = Steam::player(trim($steamId64));
+            $apps = $user->GetRecentlyPlayedGames();
 
-        foreach ($apps as $app) {
+            foreach ($apps as $app) {
 
-            // Queue each platform separately
-            foreach ($platforms as $platform) {
+                // Queue each platform separately
+                foreach ($platforms as $platform) {
 
-                $alreadyQueued = SteamQueueItem::where('app_id', $app->appId)
-                    ->where('platform', $platform)
-                    ->first();
+                    $alreadyQueued = SteamQueueItem::where('app_id', $app->appId)
+                        ->where('platform', $platform)
+                        ->first();
 
-                if ($alreadyQueued) {
-                    $this->warn('Steam app "'.$app->name.'" on platform "'.ucfirst($platform).'" already in download queue');
-                    continue;
-                }
+                    if ($alreadyQueued) {
+                        $this->warn('Steam app "' . $app->name . '" on platform "' . ucfirst($platform) . '" already in download queue');
+                        continue;
+                    }
 
-                // Add the app to the download queue, specifying the platform and account
-                $steamQueueItem = new SteamQueueItem;
-                $steamQueueItem->app_id = $app->appId;
-                $steamQueueItem->platform = $platform;
-                $steamQueueItem->status = 'queued';
+                    // Add the app to the download queue, specifying the platform and account
+                    $steamQueueItem = new SteamQueueItem;
+                    $steamQueueItem->app_id = $app->appId;
+                    $steamQueueItem->platform = $platform;
+                    $steamQueueItem->status = 'queued';
 
-                if ($steamQueueItem->save()) {
-                    $this->info('Added Steam app "'.$app->name.'" on platform "'.ucfirst($platform).'" to download queue');
+                    if ($steamQueueItem->save()) {
+                        $this->info('Added Steam app "' . $app->name . '" on platform "' . ucfirst($platform) . '" to download queue');
+                    }
                 }
             }
         }
