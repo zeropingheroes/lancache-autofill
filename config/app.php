@@ -119,6 +119,7 @@ return [
          */
         Illuminate\Cache\CacheServiceProvider::class,
         Illuminate\Filesystem\FilesystemServiceProvider::class,
+        Syntax\SteamApi\SteamApiServiceProvider::class,
 
     ],
     /*
@@ -132,5 +133,6 @@ return [
     |
     */
     'aliases' => [
+        'Config' => Illuminate\Support\Facades\Config::class,
     ],
 ];
