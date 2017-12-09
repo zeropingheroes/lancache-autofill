@@ -15,3 +15,5 @@ cd $SCRIPT_DIR && cp ".env.example" ".env"
 cd $SCRIPT_DIR && ./lancache-autofill app:initialise-database
 
 cd $SCRIPT_DIR && ./lancache-autofill steam:update-app-list
+
+cd $SCRIPT_DIR && ./lancache-autofill steam:initialise
