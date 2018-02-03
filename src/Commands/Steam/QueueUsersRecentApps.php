@@ -52,9 +52,29 @@ class QueueUsersRecentApps extends Command
             $steamIds = explode("\n", trim($steamIds));
         }
 
-        foreach ($steamIds as $steamId64) {
-            $user = Steam::player(trim($steamId64));
-            $apps = $user->GetRecentlyPlayedGames();
+        array_filter($steamIds, function ($steamId) {
+            return trim($steamId);
+        });
+
+        $users = Steam::user($steamIds[0])->GetPlayerSummaries($steamIds);
+
+        foreach ($users as $user) {
+
+            $this->info('');
+
+            if ($user->communityVisibilityState != 3) {
+                $this->warn('Skipping user with private profile: ' . $user->personaName);
+                continue;
+            }
+
+            $apps = Steam::player($user->steamId)->GetRecentlyPlayedGames();
+
+            if (empty($apps)) {
+                $this->warn('Skipping user who has not recently played any apps: ' . $user->personaName);
+                continue;
+            }
+
+            $this->info('Queuing apps recently played by user: ' . $user->personaName);
 
             foreach ($apps as $app) {
 
