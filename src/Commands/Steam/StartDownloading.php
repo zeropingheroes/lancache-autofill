@@ -3,10 +3,11 @@
 namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 
 use Illuminate\Console\Command;
-use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Zeropingheroes\LancacheAutofill\Services\SteamCmd\SteamCmd;
+use Zeropingheroes\LancacheAutofill\Models\SteamQueueItem;
+use Zeropingheroes\LancacheAutofill\Models\SteamAccount;
 
 class StartDownloading extends Command
 {
@@ -45,11 +46,17 @@ class StartDownloading extends Command
             // Attempt download using each authorised Steam account in turn
             foreach ($this->steamAccounts() as $account) {
 
-                $this->info('Starting download of '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
+                if (isset($item->app->name)) {
+                    $appName = $item->app->name;
+                } else {
+                    $appName = 'Unknown';
+                }
+
+                $this->info('Starting download of ' . $appName . ' (App ID: ' . $item->app_id . ') for ' . $item->platform . ' from Steam account "' . $account . '"');
 
                 try {
 
-                    $downloadPath = getenv('DOWNLOADS_DIRECTORY').'/'.$item->platform.'/'.$item->app_id;
+                    $downloadPath = getenv('DOWNLOADS_DIRECTORY') . '/' . $item->platform . '/' . $item->app_id;
 
                     $steamCmd = (new SteamCmd(getenv('STEAMCMD_PATH')))
                         ->login($account)
@@ -67,18 +74,16 @@ class StartDownloading extends Command
                         throw new ProcessFailedException($steamCmd);
                     }
 
-                    $this->info('Successfully completed download of '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
+                    $this->info('Successfully completed download of ' . $appName . ' (App ID: ' . $item->app_id . ') for ' . $item->platform . '. Deleting from disk.');
                     $this->updateQueueItemStatus($item->id, 'completed');
 
                     // Delete download directory
-                    $this->info('Deleting '.$item->app_id.' from disk');
-                    $remove = new Process('rm -rf '.$downloadPath);
+                    $remove = new Process('rm -rf ' . $downloadPath);
                     $remove->run(function ($type, $buffer) {
 
                         if (Process::ERR === $type) {
                             $this->error(str_replace(["\r", "\n"], '', $buffer));
-                        }
-                        else {
+                        } else {
                             $this->line(str_replace(["\r", "\n"], '', $buffer));
                         }
 
@@ -103,7 +108,7 @@ class StartDownloading extends Command
                     // Removing ANSI codes
                     $message = preg_replace('#\x1b\[[0-9;]*[a-zA-Z]#', '', $message);
 
-                    $this->error('Failed to download '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
+                    $this->error('Failed to download ' . $appName . ' (App ID: ' . $item->app_id . ') for ' . $item->platform . ' from Steam account ' . $account);
                     $this->updateQueueItemStatus($item->id, 'failed', $message);
                 }
             }
@@ -117,8 +122,7 @@ class StartDownloading extends Command
      */
     private function nextApp()
     {
-        return Capsule::table('steam_queue')
-            ->where('status', 'queued')
+        return SteamQueueItem::where('status', 'queued')
             ->first();
     }
 
@@ -132,8 +136,7 @@ class StartDownloading extends Command
      */
     private function updateQueueItemStatus($id, $status, $message = null)
     {
-        return Capsule::table('steam_queue')
-            ->where('id', $id)
+        return SteamQueueItem::where('id', $id)
             ->update(['status' => $status, 'message' => $message]);
     }
 
@@ -144,8 +147,7 @@ class StartDownloading extends Command
      */
     private function queuedItems()
     {
-        return Capsule::table('steam_queue')
-            ->where('status', 'queued')
+        return SteamQueueItem::where('status', 'queued')
             ->count();
     }
 
@@ -156,7 +158,7 @@ class StartDownloading extends Command
      */
     private function steamAccounts()
     {
-        return Capsule::table('steam_accounts')->pluck('username');
+        return SteamAccount::all()->pluck('username');
     }
 
     /**
@@ -177,11 +179,11 @@ class StartDownloading extends Command
             });
 
             if (!$steamCmd->isSuccessful()) {
-                $this->error('Steam account '.$account.' is not authorised');
-                $this->comment('Please re-run "./lancache-autofill steam:authorise-account '.$account.'"');
+                $this->error('Steam account ' . $account . ' is not authorised');
+                $this->comment('Please re-run "./lancache-autofill steam:authorise-account ' . $account . '"');
                 die();
             }
-            $this->info('Steam account '.$account.' is authorised and will be used to download apps');
+            $this->info('Steam account ' . $account . ' is authorised and will be used to download apps');
         }
     }
 }
