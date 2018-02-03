@@ -5,6 +5,7 @@ namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 use Illuminate\Console\Command;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Symfony\Component\Process\Exception\ProcessFailedException;
+use Symfony\Component\Process\Process;
 use Zeropingheroes\LancacheAutofill\Services\SteamCmd\SteamCmd;
 
 class StartDownloading extends Command
@@ -47,10 +48,13 @@ class StartDownloading extends Command
                 $this->info('Starting download of '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
 
                 try {
+
+                    $downloadPath = getenv('DOWNLOADS_DIRECTORY').'/'.$item->platform.'/'.$item->app_id;
+
                     $steamCmd = (new SteamCmd(getenv('STEAMCMD_PATH')))
                         ->login($account)
                         ->platform($item->platform)
-                        ->directory(getenv('DOWNLOADS_DIRECTORY').'/'.$item->platform.'/'.$item->app_id)
+                        ->directory($downloadPath)
                         ->update($item->app_id)
                         ->run();
 
@@ -65,6 +69,20 @@ class StartDownloading extends Command
 
                     $this->info('Successfully completed download of '.$item->app_id.' for '.$item->platform.' from Steam account '.$account);
                     $this->updateQueueItemStatus($item->id, 'completed');
+
+                    // Delete download directory
+                    $this->info('Deleting '.$item->app_id.' from disk');
+                    $remove = new Process('rm -rf '.$downloadPath);
+                    $remove->run(function ($type, $buffer) {
+
+                        if (Process::ERR === $type) {
+                            $this->error(str_replace(["\r", "\n"], '', $buffer));
+                        }
+                        else {
+                            $this->line(str_replace(["\r", "\n"], '', $buffer));
+                        }
+
+                    });
 
                     // As the download was successful, do not attempt to download using any other Steam accounts
                     break;
