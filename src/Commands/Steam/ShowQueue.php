@@ -38,11 +38,11 @@ class ShowQueue extends Command
     public function handle()
     {
         if ($this->argument('status') && !in_array($this->argument('status'), $this::STATUSES)) {
-            $this->error('Invalid status specified. Available statuses are: '.implode(' ', $this::STATUSES));
+            $this->error('Invalid status specified. Available statuses are: ' . implode(' ', $this::STATUSES));
             die();
         }
 
-        if( ! SteamQueueItem::count()) {
+        if (!SteamQueueItem::count()) {
             $this->info('Steam queue is empty');
         }
 
@@ -87,14 +87,19 @@ class ShowQueue extends Command
             return;
         }
 
-        $this->{$messageStyle}(ucfirst($status).':');
+        $this->{$messageStyle}(ucfirst($status) . ':');
 
         $table = new Table($this->output);
         $table->setHeaders(['Name', 'Platform', 'App ID', 'Message']);
 
         foreach ($steamQueueItems as $steamQueueItem) {
+            if (isset($steamQueueItem->app->name)) {
+                $appName = $steamQueueItem->app->name;
+            } else {
+                $appName = 'Unknown';
+            }
             $table->addRow([
-                $steamQueueItem->app->name,
+                $appName,
                 ucfirst($steamQueueItem->platform),
                 $steamQueueItem->app_id,
                 $steamQueueItem->message,
