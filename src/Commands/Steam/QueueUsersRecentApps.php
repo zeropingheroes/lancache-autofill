@@ -81,11 +81,13 @@ class QueueUsersRecentApps extends Command
                 // Queue each platform separately
                 foreach ($platforms as $platform) {
 
-                    $alreadyQueued = SteamQueueItem::where('app_id', $app->appId)
+                    $existingQueueItem = SteamQueueItem::where('app_id', $app->appId)
                         ->where('platform', $platform)
                         ->first();
 
-                    if ($alreadyQueued) {
+                    if ($existingQueueItem) {
+                        $existingQueueItem->popularity++;
+                        $existingQueueItem->save();
                         $this->warn('Steam app "' . $app->name . '" on platform "' . ucfirst($platform) . '" already in download queue');
                         continue;
                     }

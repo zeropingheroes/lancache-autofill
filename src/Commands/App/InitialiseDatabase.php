@@ -53,6 +53,7 @@ class InitialiseDatabase extends Command
             $table->integer('app_id');
             $table->string('status');
             $table->string('platform');
+            $table->integer('popularity')->nullable()->default(1);
             $table->string('message')->nullable();
         });
 

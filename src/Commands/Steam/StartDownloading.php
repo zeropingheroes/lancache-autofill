@@ -123,6 +123,7 @@ class StartDownloading extends Command
     private function nextApp()
     {
         return SteamQueueItem::where('status', 'queued')
+            ->orderBy('popularity', 'desc')
             ->first();
     }
 

@@ -80,6 +80,7 @@ class ShowQueue extends Command
         }
 
         $steamQueueItems = SteamQueueItem::where('status', $status)
+            ->orderBy('popularity', 'desc')
             ->orderBy('message')
             ->get();
 
@@ -90,7 +91,7 @@ class ShowQueue extends Command
         $this->{$messageStyle}(ucfirst($status) . ':');
 
         $table = new Table($this->output);
-        $table->setHeaders(['Name', 'Platform', 'App ID', 'Message']);
+        $table->setHeaders(['Name', 'Platform', 'Popularity', 'App ID', 'Message']);
 
         foreach ($steamQueueItems as $steamQueueItem) {
             if (isset($steamQueueItem->app->name)) {
@@ -101,6 +102,7 @@ class ShowQueue extends Command
             $table->addRow([
                 $appName,
                 ucfirst($steamQueueItem->platform),
+                $steamQueueItem->popularity,
                 $steamQueueItem->app_id,
                 $steamQueueItem->message,
             ]);
