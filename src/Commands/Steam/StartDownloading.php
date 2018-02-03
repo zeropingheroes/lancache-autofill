@@ -158,7 +158,7 @@ class StartDownloading extends Command
      */
     private function steamAccounts()
     {
-        return SteamAccount::all()->pluck('username');
+        return SteamAccount::all()->pluck('username')->toArray();
     }
 
     /**
@@ -166,9 +166,22 @@ class StartDownloading extends Command
      */
     private function checkSteamAccountsAreAuthorised()
     {
+        $accounts = $this->steamAccounts();
+
+        if ( ! $accounts) {
+            $this->error('No Steam accounts authorised');
+            $this->comment('');
+            $this->comment('Please run: ');
+            $this->comment('    ./lancache-autofill steam:authorise-account');
+            $this->comment('');
+
+            die();
+        }
+
         $this->info('Checking all Steam accounts are authorised');
 
-        foreach ($this->steamAccounts() as $account) {
+        foreach ($accounts as $account) {
+            $this->info('Checking Steam account ' . $account . '...');
             $steamCmd = (new SteamCmd(getenv('STEAMCMD_PATH')))
                 ->login($account)
                 ->run();
@@ -180,7 +193,11 @@ class StartDownloading extends Command
 
             if (!$steamCmd->isSuccessful()) {
                 $this->error('Steam account ' . $account . ' is not authorised');
-                $this->comment('Please re-run "./lancache-autofill steam:authorise-account ' . $account . '"');
+                $this->comment('');
+                $this->comment('Please re-run:');
+                $this->comment('     ./lancache-autofill steam:authorise-account ' . $account . '"');
+                $this->info('');
+
                 die();
             }
             $this->info('Steam account ' . $account . ' is authorised and will be used to download apps');
