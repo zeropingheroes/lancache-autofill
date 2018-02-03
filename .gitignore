@@ -4,3 +4,5 @@ database.sqlite
 .idea/
 .vagrant/
 .DS_Store
+.swp
+*.txt
