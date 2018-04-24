@@ -15,6 +15,10 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * Retry downloading of some or all failed apps
 * Clear the temporary download directory 
 
+# Screenshots
+
+![Queuing apps](docs/screenshots/lancache-autofill-01.png)
+![Starting the download process](docs/screenshots/lancache-autofill-02.png)
 
 # Requirements
 * A working [lancache](https://github.com/zeropingheroes/lancache)
