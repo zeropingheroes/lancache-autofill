@@ -46,7 +46,7 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
         lancache-autofill steam:authorise-account [<account>]
         lancache-autofill steam:update-app-list
         
-	    lancache-autofill steam:search-apps <app name>
+        lancache-autofill steam:search-apps <app name>
         lancache-autofill steam:queue-app <app id> [<app id>...] [--windows=true] [--osx] [--linux]
         lancache-autofill steam:queue-popular-apps [top=100] [--free] [--windows=true] [--osx] [--linux]
         lancache-autofill steam:queue-users-recent-apps <steam id 64> [<steam id 64>...] [--windows=true] [--osx] [--linux]
@@ -62,6 +62,27 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 * Paid apps can only be cached with access to a Steam account that owns them
 * No support for forcing download of 32 bit apps
 * Yes, it's written in PHP. No shame.
+
+# SteamCMD Errors
+
+| Error                                          | Possible Reason                                   |
+| ---------------------------------------------- | ------------------------------------------------- |
+| `ERROR! Timed out waiting for AppInfo update.` | Unknown                                           |
+| `Login Failure: Rate Limit Exceeded (84)`      | Unknown                                           |
+| `ERROR! Failed to install (No subscription)`   | Game not owned by any authorised accounts         |
+| `Error! State is 0x202 after update job.`      | Not enough space to download game                 |
+| `Error! State is 0x402 after update job.`      | Update required but not completed - check network |
+| `Error! State is 0x602 after update job.`      | Update required but not completed - check network |
+
+For other error codes, you can calculate the app's state(s) by converting the `0x000` code to decimal,
+and finding which [AppState codes](https://github.com/lutris/lutris/blob/master/docs/steam.rst)
+sum to the given code, which will give you some clues as to what's going on.
+
+For example:
+* [`0x402` to decimal](https://www.google.co.uk/search?q=0x402+to+decimal) = 1026
+* 1026 is the sum of:
+    * 2:    `StateUpdateRequired`
+    * 1024: `StateUpdateStarted`
 
 # Reference
 
