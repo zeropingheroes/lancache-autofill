@@ -48,6 +48,8 @@ class SteamCmd
      */
     public function login(string $username, string $password = '', string $guard = '')
     {
+        $password = addslashes($password);
+
         // Login using cached credentials
         if ($username && !$password) {
             $this->addArgument('login', $username);
@@ -55,12 +57,12 @@ class SteamCmd
 
         // Login using username and password (Steam Guard disabled)
         if ($username && $password && !$guard) {
-            $this->addArgument('login', "$username $password");
+            $this->addArgument('login', "$username \"$password\"");
         }
 
         // Login using username, password and Steam Guard code
         if ($username && $password && $guard) {
-            $this->addArgument('login', "$username $password $guard");
+            $this->addArgument('login', "$username \"$password\" $guard");
         }
 
         // Regardless of how the user is logging in, do not prompt for password interactively
