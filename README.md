@@ -48,7 +48,7 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
         
         lancache-autofill steam:search-apps <app name>
         lancache-autofill steam:queue-app <app id> [<app id>...] [--windows=true] [--osx] [--linux]
-        lancache-autofill steam:queue-popular-apps [top=100] [--free] [--windows=true] [--osx] [--linux]
+        lancache-autofill steam:queue-popular-apps [<top X apps>] [--free] [--windows=true] [--osx] [--linux]
         lancache-autofill steam:queue-users-recent-apps <steam id 64> [<steam id 64>...] [--windows=true] [--osx] [--linux]
         lancache-autofill steam:queue-users-recent-apps <steam-ids.txt> [--windows=true] [--osx] [--linux]
         
