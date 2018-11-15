@@ -66,9 +66,16 @@ class StartDownloading extends Command
                         ->run();
 
                     // Show SteamCMD output line by line
-                    $steamCmd->run(function ($type, $buffer) {
-                        $this->line(str_replace(["\r", "\n"], '', $buffer));
-                    });
+                    $steamCmd->run(
+                        function ($type, $buffer) use (&$account) {
+                            $this->line(str_replace(["\r", "\n"], '', $buffer));
+
+                            if (str_contains(strtolower($buffer), 'password:')) {
+                                $this->displayAccountNotAuthorisedError($account);
+                                die();
+                            }
+                        }
+                    );
 
                     if (!$steamCmd->isSuccessful()) {
                         throw new ProcessFailedException($steamCmd);
@@ -194,20 +201,42 @@ class StartDownloading extends Command
                 ->run();
 
             // Show SteamCMD output line by line
-            $steamCmd->run(function ($type, $buffer) {
-                $this->line(str_replace(["\r", "\n"], '', $buffer));
-            });
+            $steamCmd->run(
+                function ($type, $buffer) use (&$account) {
+                    $this->line(str_replace(["\r", "\n"], '', $buffer));
+
+                    // Abort if prompted for a password
+                    if (str_contains(strtolower($buffer), 'password:')) {
+                        $this->displayAccountNotAuthorisedError($account);
+                        die();
+                    }
+                }
+            );
 
             if (!$steamCmd->isSuccessful()) {
-                $this->error('Steam account ' . $account . ' is not authorised');
-                $this->comment('');
-                $this->comment('Please re-run:');
-                $this->comment('     ./lancache-autofill steam:authorise-account ' . $account . '"');
-                $this->info('');
-
+                $this->displayAccountNotAuthorisedError($account);
                 die();
             }
             $this->info('Steam account ' . $account . ' is authorised and will be used to download apps');
         }
+    }
+
+    /**
+     * Display account not authorised error message
+     *
+     * @param string $account
+     */
+    private function displayAccountNotAuthorisedError(string $account)
+    {
+
+        $steamUserdataDirectory = pathinfo(getenv('STEAMCMD_PATH'))['dirname'] . '/userdata';
+
+        $this->error('Steam account ' . $account . ' is not authorised');
+        $this->comment('');
+        $this->comment('Please re-run:');
+        $this->comment('     ./lancache-autofill steam:authorise-account ' . $account);
+        $this->comment('');
+        $this->comment('If this error persists, empty the ' . $steamUserdataDirectory . ' directory');
+        $this->info('');
     }
 }
