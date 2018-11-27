@@ -21,7 +21,7 @@ return [
     | services your application utilizes. Set this in your ".env" file.
     |
     */
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'local'),
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -32,7 +32,7 @@ return [
     | application. If disabled, a simple generic error page is shown.
     |
     */
-    'debug' => env('APP_DEBUG', false),
+    'debug' => env('APP_DEBUG', true),
     /*
     |--------------------------------------------------------------------------
     | Application URL
