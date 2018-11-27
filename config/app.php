@@ -118,6 +118,7 @@ return [
          * Laravel Framework Service Providers...
          */
         Illuminate\Cache\CacheServiceProvider::class,
+        Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Filesystem\FilesystemServiceProvider::class,
         Syntax\SteamApi\SteamApiServiceProvider::class,
 

@@ -1,10 +1,22 @@
 {
+    "name": "zeropingheroes/lancache-autofill",
+    "description": "Automatically fill a Lancache with content",
+    "authors": [
+        {
+            "name": "Olly Baker",
+            "email": "ilumos@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "keywords": ["lanager", "lan", "party", "lancache", "steamcache"],
+    "license": "AGPL-3.0",
     "require": {
         "illuminate/console": "5.5.*",
         "illuminate/support": "5.5.*",
         "illuminate/container": "5.5.*",
         "illuminate/events": "5.5.*",
         "illuminate/database": "5.5.*",
+        "illuminate/translation": "5.5.*",
         "guzzlehttp/guzzle": "^6.3",
         "symfony/process": "^3.3",
         "vlucas/phpdotenv": "^2.4",
@@ -12,5 +24,17 @@
     },
     "autoload": {
         "psr-4": {"Zeropingheroes\\LancacheAutofill\\": "src/"}
-    }
+    },
+    "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
 }
