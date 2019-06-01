@@ -118,7 +118,7 @@ class StartDownloading extends Command
                     $this->error('Failed to download ' . $appName . ' (App ID: ' . $item->app_id . ') for ' . $item->platform . ' from Steam account ' . $account);
                     $this->updateQueueItemStatus($item->id, 'failed', $message);
 
-                    if(str_contains(strtolower($message), 'rate limit') ) {
+                    if(str_contains(strtolower($message), strtolower('rate limit')) ) {
                         $this->warn('Rate limit detected - sleeping for 1 minute');
                         sleep(60);
                         $this->checkSteamAccountsAreAuthorised();
