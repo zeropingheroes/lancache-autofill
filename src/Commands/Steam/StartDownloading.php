@@ -236,7 +236,9 @@ class StartDownloading extends Command
         $this->comment('Please re-run:');
         $this->comment('     ./lancache-autofill steam:authorise-account ' . $account);
         $this->comment('');
-        $this->comment('If this error persists, empty the ' . $steamUserdataDirectory . ' directory');
+        $this->comment('If this error persists:');
+        $this->comment('- Empty the ' . $steamUserdataDirectory . ' directory');
+        $this->comment('- Temporarily disable Steam Site License server, if you\'re using it');
         $this->info('');
     }
 }
