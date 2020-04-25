@@ -152,7 +152,7 @@ class SteamCmd
      *
      * @return Process
      */
-    public function run($timeout = 14400, $idleTimeout = 60)
+    public function run($timeout = 14400, $idleTimeout = 600)
     {
         // Always quit when finished
         $this->addArgument('quit');
