@@ -2,7 +2,6 @@
 Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with the content of your choosing, so that subsequent downloads for the same content will be served from the lancache, improving speeds and reducing load on your internet connection.
 
 # Features
-* Download the top popular free and/or paid apps on Steam
 * Download a specific app by ID
 * Choose which platform(s) apps should be downloaded for
 * Download one (or more) users recently played apps
@@ -48,7 +47,6 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
         
         lancache-autofill steam:search-apps <app name>
         lancache-autofill steam:queue-app <app id> [<app id>...] [--windows=true] [--osx] [--linux]
-        lancache-autofill steam:queue-popular-apps [<top X apps>] [--free] [--windows=true] [--osx] [--linux]
         lancache-autofill steam:queue-users-recent-apps <steam id 64> [<steam id 64>...] [--windows=true] [--osx] [--linux]
         lancache-autofill steam:queue-users-recent-apps <steam-ids.txt> [--windows=true] [--osx] [--linux]
         
