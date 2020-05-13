@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "a67ae95addd33b471f75b6722fe32b6e",
@@ -749,6 +749,7 @@
                 "cron",
                 "schedule"
             ],
+            "abandoned": "dragonmantank/cron-expression",
             "time": "2017-01-23T04:29:33+00:00"
         },
         {
@@ -2112,16 +2113,16 @@
         },
         {
             "name": "syntax/steam-api",
-            "version": "2.0.14",
+            "version": "2.0.16",
             "source": {
                 "type": "git",
                 "url": "https://github.com/syntaxerrors/Steam.git",
-                "reference": "98c2f370de335a8a524b3c2ba056ad76c5dd8da4"
+                "reference": "61323d368d7eca17a267612a2434f570518fd069"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/syntaxerrors/Steam/zipball/98c2f370de335a8a524b3c2ba056ad76c5dd8da4",
-                "reference": "98c2f370de335a8a524b3c2ba056ad76c5dd8da4",
+                "url": "https://api.github.com/repos/syntaxerrors/Steam/zipball/61323d368d7eca17a267612a2434f570518fd069",
+                "reference": "61323d368d7eca17a267612a2434f570518fd069",
                 "shasum": ""
             },
             "require": {
@@ -2159,7 +2160,7 @@
                 }
             ],
             "description": "A steam-api client for Laravel 5.",
-            "time": "2018-10-29T05:28:37+00:00"
+            "time": "2019-10-09T11:48:34+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -2266,5 +2267,6 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }
