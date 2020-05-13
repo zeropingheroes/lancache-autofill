@@ -28,7 +28,7 @@ class QueueUsersRecentApps extends Command
      *
      * @var string
      */
-    protected $description = 'Queue a user\'s recently played Steam apps for downloading';
+    protected $description = 'Queue one or more users\' recently played Steam apps for downloading';
 
     /**
      * Execute the console command.
