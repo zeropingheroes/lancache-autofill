@@ -6,3 +6,4 @@ database.sqlite
 .DS_Store
 .swp
 *.txt
+*.bucket

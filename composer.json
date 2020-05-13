@@ -11,16 +11,17 @@
     "keywords": ["lanager", "lan", "party", "lancache", "steamcache"],
     "license": "AGPL-3.0",
     "require": {
-        "illuminate/console": "5.5.*",
-        "illuminate/support": "5.5.*",
-        "illuminate/container": "5.5.*",
-        "illuminate/events": "5.5.*",
-        "illuminate/database": "5.5.*",
-        "illuminate/translation": "5.5.*",
+        "bandwidth-throttle/token-bucket": "^2.0",
         "guzzlehttp/guzzle": "^6.3",
+        "illuminate/console": "5.5.*",
+        "illuminate/container": "5.5.*",
+        "illuminate/database": "5.5.*",
+        "illuminate/events": "5.5.*",
+        "illuminate/support": "5.5.*",
+        "illuminate/translation": "5.5.*",
         "symfony/process": "^3.3",
-        "vlucas/phpdotenv": "^2.4",
-        "syntax/steam-api": "2.0.*"
+        "syntax/steam-api": "2.0.*",
+        "vlucas/phpdotenv": "^2.4"
     },
     "autoload": {
         "psr-4": {"Zeropingheroes\\LancacheAutofill\\": "src/"}

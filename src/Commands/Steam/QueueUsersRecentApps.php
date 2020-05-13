@@ -5,6 +5,10 @@ namespace Zeropingheroes\LancacheAutofill\Commands\Steam;
 use Illuminate\Console\Command;
 use Zeropingheroes\LancacheAutofill\Models\SteamQueueItem;
 use Steam;
+use bandwidthThrottle\tokenBucket\Rate;
+use bandwidthThrottle\tokenBucket\TokenBucket;
+use bandwidthThrottle\tokenBucket\BlockingConsumer;
+use bandwidthThrottle\tokenBucket\storage\FileStorage;
 
 class QueueUsersRecentApps extends Command
 {
@@ -56,10 +60,22 @@ class QueueUsersRecentApps extends Command
             return trim($steamId);
         });
 
-        $users = Steam::user($steamIds[0])->GetPlayerSummaries($steamIds);
+        // Rate limit requests to 200 requests every 5 minutes, to match Steam's rate limit
+        $storage = new FileStorage(base_path('steam-api.bucket')); // store state in base directory
+        $rate = new Rate(40, Rate::MINUTE); // add 40 tokens every minute (= 200 over 5 minutes)
+        $bucket = new TokenBucket(200, $rate, $storage); // bucket can never have more than 200 tokens saved up
+        $consumer = new BlockingConsumer($bucket); // if no tokens are available, block further execution until there are tokens
+        $bucket->bootstrap(200); // fill the bucket with 200 tokens initially
+
+        $chunkedSteamIds = array_chunk($steamIds, 10);
+
+        $users = [];
+        foreach($chunkedSteamIds as $chunkOf100SteamIds) {
+            $consumer->consume(1);
+            $users = array_merge($users, Steam::user($chunkOf100SteamIds[0])->GetPlayerSummaries($chunkOf100SteamIds));
+        }
 
         foreach ($users as $user) {
-
             $this->info('');
 
             if ($user->communityVisibilityState != 3) {
@@ -67,6 +83,7 @@ class QueueUsersRecentApps extends Command
                 continue;
             }
 
+            $consumer->consume(1);
             $apps = Steam::player($user->steamId)->GetRecentlyPlayedGames();
 
             if (empty($apps)) {
