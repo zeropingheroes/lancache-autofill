@@ -5,7 +5,7 @@ namespace Zeropingheroes\LancacheAutofill\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Zeropingheroes\LancacheAutofill\Commands\Steam\{
-    AuthoriseAccount, Dequeue, Initialise, QueueApp, QueueUsersRecentApps, Requeue, SearchApps, ShowQueue, StartDownloading, UpdateAppList
+    AuthoriseAccount, Dequeue, Initialise, QueueApp, QueuePopularApps, QueueUsersRecentApps, Requeue, SearchApps, ShowQueue, StartDownloading, UpdateAppList
 };
 use Zeropingheroes\LancacheAutofill\Commands\App\{
     InitialiseDatabase, InitialiseDownloadsDirectory
@@ -26,6 +26,7 @@ class Kernel extends ConsoleKernel
         UpdateAppList::class,
         SearchApps::class,
         QueueApp::class,
+        QueuePopularApps::class,
         QueueUsersRecentApps::class,
         ShowQueue::class,
         StartDownloading::class,
