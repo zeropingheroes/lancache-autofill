@@ -67,6 +67,13 @@ class QueuePopularApps extends Command
 
         $apps = json_decode($result->getBody(), true);
 
+        if ( ! count($apps) ) {
+            $this->error('SteamSpy API did not return any apps:');
+            $this->error(self::POPULAR_STEAM_APP_LIST_URL . ' returned:');
+            $this->error($result->getBody());
+            die();
+        }
+
         $i = 0;
 
         foreach ($apps as $appId => $app) {
