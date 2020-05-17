@@ -61,7 +61,8 @@ class QueuePopularApps extends Command
         $result = $client->request('GET', self::POPULAR_STEAM_APP_LIST_URL);
 
         if ($result->getStatusCode() != 200) {
-            $this->error('Web API unreachable');
+            $this->error('SteamSpy API unreachable:');
+            $this->error(self::POPULAR_STEAM_APP_LIST_URL . ' returned HTTP ' . $result->getStatusCode());
             die();
         }
 
