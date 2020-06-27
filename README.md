@@ -28,7 +28,7 @@ Automatically fill a [lancache](https://github.com/zeropingheroes/lancache) with
 
 # Installation
 1. `sudo apt update -y` 
-2. `sudo apt install -y lib32gcc1 lib32stdc++6 lib32tinfo5 lib32ncurses5 php7.2-cli php7.2-mbstring php7.2-sqlite php7.2-bcmath composer expect zip unzip`
+2. `sudo apt install -y lib32gcc1 lib32stdc++6 lib32tinfo5 lib32ncurses5 php7.2-cli php7.2-mbstring php7.2-sqlite php7.2-bcmath php7.2-dom composer expect zip unzip`
 3. `git clone https://github.com/zeropingheroes/lancache-autofill.git && cd lancache-autofill`
 4. `./install.sh`
 5. Get a Steam API key from http://steamcommunity.com/dev/apikey and add it to the `.env` file
