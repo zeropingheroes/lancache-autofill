@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         QueueApp::class,
         QueuePopularApps::class,
         QueueUsersRecentApps::class,
+        QueueUsersOwnedApps::class,
         ShowQueue::class,
         StartDownloading::class,
         AuthoriseAccount::class,
