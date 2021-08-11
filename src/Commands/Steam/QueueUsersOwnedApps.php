@@ -89,7 +89,7 @@ class QueueUsersOwnedApps extends Command
             }
 
             $consumer->consume(1);
-            $apps = Steam::player($user->steamId)->GetOwnedGames(includePlayedFreeGames: $includeFree);
+            $apps = Steam::player($user->steamId)->GetOwnedGames(true, $includeFree);
 
             if (empty($apps)) {
                 $this->warn('Skipping user who does not own any apps: ' . $user->personaName);
