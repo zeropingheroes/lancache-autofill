@@ -20,6 +20,7 @@ class QueueUsersOwnedApps extends Command
     protected $signature = 'steam:queue-users-owned-apps
                             {steamIds* : One or more SteamId64(s) for the user(s) whose apps to queue, or a file containing a list}
                             {--include_free=true : Queue played free games}
+                            {--include_paid=true : Queue purchased games}
                             {--windows=true : Queue the Windows version of the apps}
                             {--osx : Queue the OS X version of the apps}
                             {--linux : Queue the Linux version of the apps}';
@@ -53,6 +54,10 @@ class QueueUsersOwnedApps extends Command
 
         if ($this->option('include_free')) {
             $includeFree = true;
+        }
+
+        if ($this->option('include_paid')) {
+            $includePaid = true;
         }
         $steamIds = $this->argument('steamIds');
 
@@ -91,8 +96,20 @@ class QueueUsersOwnedApps extends Command
             $consumer->consume(1);
             $apps = Steam::player($user->steamId)->GetOwnedGames(true, $includeFree);
 
+            if (!$includePaid) {
+                // Technically the appDetails() method supports an array of app IDs
+                // However, the Steam API fails when more than 1 app ID is passed at a time
+                // See https://wiki.teamfortress.com/wiki/User:RJackson/StorefrontAPI#appdetails
+                $apps = $apps->filter(function ($app, $key) use ($consumer) {
+                    $consumer->consume(1);
+                    $appDetails = Steam::app()->appDetails($app->appId);
+
+                    return $appDetails->isFree;
+                });
+            }
+
             if (empty($apps)) {
-                $this->warn('Skipping user who does not own any apps: ' . $user->personaName);
+                $this->warn('Skipping user who does not own any matching apps: ' . $user->personaName);
                 continue;
             }
 
