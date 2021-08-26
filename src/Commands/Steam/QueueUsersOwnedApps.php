@@ -98,8 +98,14 @@ class QueueUsersOwnedApps extends Command
                 $apps = $apps->filter(function ($app, $key) use ($consumer) {
                     $consumer->consume(1);
                     $appDetails = Steam::app()->appDetails($app->appId);
+                    $isFree = $appDetails->isFree->get(0);
 
-                    return $appDetails->isFree[0];
+                    if (!isset($isFree)) {
+                        $this->warn('Unable to determine whether app ' . $app->name . ' (' . $app->appId . ') is free to play, skipping');
+                        return false;
+                    }
+
+                    return $isFree;
                 });
             }
 
