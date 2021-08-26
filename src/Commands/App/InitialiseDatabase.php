@@ -44,13 +44,13 @@ class InitialiseDatabase extends Command
 
         $this->info('Creating empty database tables');
         Capsule::schema()->create('steam_apps', function ($table) {
-            $table->integer('id')->unique();
+            $table->bigInteger('id')->unique();
             $table->string('name');
         });
 
         Capsule::schema()->create('steam_queue', function ($table) {
             $table->increments('id')->unique();
-            $table->integer('app_id');
+            $table->bigInteger('app_id');
             $table->string('status');
             $table->string('platform');
             $table->integer('popularity')->nullable()->default(1);
