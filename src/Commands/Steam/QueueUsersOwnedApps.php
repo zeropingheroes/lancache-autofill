@@ -104,7 +104,7 @@ class QueueUsersOwnedApps extends Command
                     $consumer->consume(1);
                     $appDetails = Steam::app()->appDetails($app->appId);
 
-                    return $appDetails->isFree;
+                    return $appDetails->isFree[0];
                 });
             }
 
