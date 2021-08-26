@@ -52,13 +52,8 @@ class QueueUsersOwnedApps extends Command
             $platforms[] = 'linux';
         }
 
-        if ($this->option('include_free')) {
-            $includeFree = true;
-        }
-
-        if ($this->option('include_paid')) {
-            $includePaid = true;
-        }
+        $includeFree = is_null($this->option('include_free')) || filter_var($this->option('include_free'), FILTER_VALIDATE_BOOLEAN);
+        $includePaid = is_null($this->option('include_paid')) || filter_var($this->option('include_paid'), FILTER_VALIDATE_BOOLEAN);
         $steamIds = $this->argument('steamIds');
 
         if (file_exists($steamIds[0])) {
