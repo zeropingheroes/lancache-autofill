@@ -20,6 +20,7 @@ class QueueUsersOwnedApps extends Command
     protected $signature = 'steam:queue-users-owned-apps
                             {steamIds* : One or more SteamId64(s) for the user(s) whose apps to queue, or a file containing a list}
                             {--include_free=true : Queue played free games}
+                            {--include_paid=true : Queue purchased games}
                             {--windows=true : Queue the Windows version of the apps}
                             {--osx : Queue the OS X version of the apps}
                             {--linux : Queue the Linux version of the apps}';
@@ -51,9 +52,8 @@ class QueueUsersOwnedApps extends Command
             $platforms[] = 'linux';
         }
 
-        if ($this->option('include_free')) {
-            $includeFree = true;
-        }
+        $includeFree = is_null($this->option('include_free')) || filter_var($this->option('include_free'), FILTER_VALIDATE_BOOLEAN);
+        $includePaid = is_null($this->option('include_paid')) || filter_var($this->option('include_paid'), FILTER_VALIDATE_BOOLEAN);
         $steamIds = $this->argument('steamIds');
 
         if (file_exists($steamIds[0])) {
@@ -91,8 +91,26 @@ class QueueUsersOwnedApps extends Command
             $consumer->consume(1);
             $apps = Steam::player($user->steamId)->GetOwnedGames(true, $includeFree);
 
+            if (!$includePaid) {
+                // Technically the appDetails() method supports an array of app IDs
+                // However, the Steam API fails when more than 1 app ID is passed at a time
+                // See https://wiki.teamfortress.com/wiki/User:RJackson/StorefrontAPI#appdetails
+                $apps = $apps->filter(function ($app, $key) use ($consumer) {
+                    $consumer->consume(1);
+                    $appDetails = Steam::app()->appDetails($app->appId);
+                    $isFree = $appDetails->isFree->get(0);
+
+                    if (!isset($isFree)) {
+                        $this->warn('Unable to determine whether app ' . $app->name . ' (' . $app->appId . ') is free to play, skipping');
+                        return false;
+                    }
+
+                    return $isFree;
+                });
+            }
+
             if (empty($apps)) {
-                $this->warn('Skipping user who does not own any apps: ' . $user->personaName);
+                $this->warn('Skipping user who does not own any matching apps: ' . $user->personaName);
                 continue;
             }
 
