@@ -6,7 +6,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.box = "ubuntu/bionic64"
+  config.vm.box = "hashicorp/bionic64"
   config.vm.hostname = "lancache-autofill"
   config.vm.network "public_network",
       use_dhcp_assigned_default_route: true
