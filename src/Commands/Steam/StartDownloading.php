@@ -59,9 +59,9 @@ class StartDownloading extends Command
                     $downloadPath = getenv('DOWNLOADS_DIRECTORY') . '/' . $item->platform . '/' . $item->app_id;
 
                     $steamCmd = (new SteamCmd(getenv('STEAMCMD_PATH')))
+                        ->directory($downloadPath)
                         ->login($account)
                         ->platform($item->platform)
-                        ->directory($downloadPath)
                         ->update($item->app_id)
                         ->run();
 
